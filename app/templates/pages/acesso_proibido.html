@@ -1,0 +1,12 @@
+{% extends "components/body.html" %} {% block title %}Cadastrar Quiz{% endblock %} 
+{% block content %}
+
+<div class="container position-relative">
+    <div class="position-absolute text-center" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <h1 class="text-danger">Acesso Proibido</h1>
+        <h3 class="text-danger">Você não tem permissão para acessar esta página</h3>
+        <a href="{{ url_for('index') }}" class="btn btn-danger">Voltar</a>
+    </div>
+</div>
+
+{% endblock %}

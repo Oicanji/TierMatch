@@ -1,0 +1,22 @@
+{% extends "components/body.html" %} {% block title %}Quiz{% endblock %} 
+{% block content %}
+
+<div class="cloud-container" id="quiz">
+
+</div>
+
+<script src="static/js/quiz/quiz.js"></script>
+<script src="static/js/quiz/quiz-ui.js"></script>
+<script src="static/js/quiz/quiz-logic.js"></script>
+<script src="static/js/quiz/quiz-result.js"></script>
+
+<script>
+    $(document).ready(function() {
+    quiz.start(debug);
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<script>
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+    setTimeout(function () {
+        
+        Toast.fire({
+                icon: '{{ category }}',
+                title: '{{ message }}',
+        })
+    }, 500);
+</script>
+{% endfor %}
+{% endif %}
+{% endwith %}

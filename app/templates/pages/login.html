@@ -1,0 +1,21 @@
+{% extends "components/body.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="p-5">
+    <form method="POST">
+        <h3 align="center">Login</h3>
+        <div class="form-group">
+            <label for="email">Endereço de email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Informe o email" />
+        </div>
+        <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Informe a senha" />
+        </div>
+        <br />
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
