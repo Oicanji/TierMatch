@@ -267,6 +267,28 @@ def get_categories():
     return response.parse(404)
 
 """
+ROTA / SET / CATEGORY
+Rota de cadastro de uma categoria
+"""
+@views.route('/set/category', methods=['POST'])
+def set_category():
+    if not current_user.is_authenticated:
+        return response.parse(403)
+
+    data = request.get_json()
+    if data:
+        if data['name'] and data['color']:
+            category = Category(name=data['name'], color=data['color'])
+            db.session.add(category)
+            db.session.commit()
+            return response.parse(200, {"category": category})
+        else:
+            return response.parse(400)
+    else:
+        return response.parse(400)
+
+
+"""
 ROTA / REMOVE / CATEGORY
 Sim não é necessário editar uma categoria, apenas remover e criar uma nova
 Tem que ser passado o id da categoria
@@ -358,22 +380,6 @@ def set_answers():
                     db.session.commit()
     
     return jsonify({'code': 200, 'message': 'Respostas cadastradas com sucesso'})
-
-# '/set/category'
-# Vou te enviar um json da seguinte forma:
-# data {
-#   name
-#   color: #hex;
-# }
-@views.route('/set/category', methods=['POST'])
-def set_category():
-    data = request.get_json()
-    if data:
-        category = Category(name=data['name'], color=data['color'])
-        db.session.add(category)
-        db.session.commit()
-        return jsonify({'code': 200, 'message': 'Categoria cadastrada com sucesso'})
-    return jsonify({'code': 400, 'message': 'Parâmetros inválidos'})
 
 # '/set/category_to_quiz'
 # Vou te mandar um parâmetro 'category_id' e um 'quiz_id' e faz o teu, só lembra de ver que a sessão pode assinar naquele quiz.
