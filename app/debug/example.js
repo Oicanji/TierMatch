@@ -1,12 +1,15 @@
 var debug = {
     "quiz": {
-        "Id": 1,
+        "id": 1,
         "name": "Sample Quiz",
         "description": "This is a sample quiz to show how the app works.",
         "date": "2014-01-01",
         "allow_alias": "Dentro",
         "deny_alias": "Fora",
         "super_allow_alias": "Super Dentro",
+        "allow_color": "#ec4040",
+        "deny_color": "#5aedc9",
+        "super_allow_color": "#029ccc",
         "categories": [
             {
                 "name": "Sample Category",

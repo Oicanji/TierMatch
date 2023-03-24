@@ -364,43 +364,37 @@ def delete_question():
         return response.parse(400)
     
 """
-ROTA / GET / ANSWERS
-Rota de busca de respostas
-É necessário passar o question_id e o 
+ROTA / SET / ANSWERS
+Rota de inserir as respostas de um usuario
+ele recebe uma lista de respostas
+é necessário passar o quiz_id para conectar com o quiz
+
+Essa lista de respostas tem que ser indentificada e salva na tabela Answers
+Cada resposta ainda deve ser inserida na tabela Answer que relaciona a resposta 'value' com a questão
 """
 @views.route('/set/answers', methods=['POST'])
 def set_answers():
+    if not current_user.is_authenticated:
+        return response.parse(403)
     data = request.get_json()
     if data:
-        for answer in data['response']:
-            if answer['id'] and answer['answer']:
-                answer = Answer.query.filter_by(id=answer['id']).first()
-                if answer:
-                    answer.answer = answer['answer']
-                    db.session.commit()
-    
-    return jsonify({'code': 200, 'message': 'Respostas cadastradas com sucesso'})
-
-# '/set/category_to_quiz'
-# Vou te mandar um parâmetro 'category_id' e um 'quiz_id' e faz o teu, só lembra de ver que a sessão pode assinar naquele quiz.
-@views.route('/set/category_to_quiz', methods=['POST'])
-def set_category_to_quiz():
-    category_id = request.args.get('category_id')
-    quiz_id = request.args.get('quiz_id')
-    if category_id and quiz_id:
-        quiz = Quiz.query.filter_by(id=quiz_id).first()
-        if quiz:
-            if quiz.user_id == current_user.id:
-                quiz.category_id = category_id
+        if data['answers'] and data['answer']:
+            quiz = Quiz.query.filter_by(id=data['answer']).first()
+            if quiz:
+                respost = Answers(id_user=current_user.id, id_quiz=quiz.id)
+                db.session.add(respost)
                 db.session.commit()
-                return jsonify({'code': 200, 'message': 'Categoria adicionada com sucesso'})
+                for answer in data['answers']:
+                    answer = Answer(id_question=answer['id'], value=answer['answer'], id_answer=respost.id)
+                    db.session.add(answer)
+                    db.session.commit()
+                return response.parse(200)
             else:
-                return jsonify({'code': 403, 'message': 'Acesso negado'})
+                return response.parse(404)
         else:
-            return jsonify({'code': 404, 'message': 'Quiz não encontrado'})
+            return response.parse(400)
     else:
-        return jsonify({'code': 400, 'message': 'Parâmetros inválidos'})
-
+        return response.parse(400)
 
 # '/set/question'
 # Vou te mandar um json da seguinte forma:

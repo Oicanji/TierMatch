@@ -53,8 +53,8 @@ quiz.ui = {
         }, 500);
     },
     setTitle: function () {
-        document.querySelector('.quiz-title h3').innerHTML = quiz.data.quiz.name;
-        document.querySelector('.quiz-title p').innerHTML = quiz.data.quiz.description;
+        document.querySelector('.quiz-title h3').innerHTML = quiz.data.name;
+        document.querySelector('.quiz-title p').innerHTML = quiz.data.description;
     },
     setQuestion: function () {
         document.querySelector('.meet-char').style.backgroundImage = `url(${quiz.logic.question.image})`;
@@ -63,7 +63,7 @@ quiz.ui = {
     setNextQuestion: function () {    
         //verificar caso exista mais uma pergunta para colocar no .meet-next, caso contrario deixar o background transparente
         if (quiz.logic.actual_question + 1 < quiz.logic.total_questions) {
-            document.querySelector('.meet-next').style.backgroundImage = `url(${quiz.data.quiz.questions[quiz.logic.actual_question + 1].image})`;
+            document.querySelector('.meet-next').style.backgroundImage = `url(${quiz.data.questions[quiz.logic.actual_question + 1].image})`;
         } else {
             document.querySelector('.meet-next').style.backgroundImage = `url()`;
         }
@@ -344,8 +344,55 @@ quiz.ui = {
         if (right_top == "") {
             quiz.ui.handleHideAll();
         }
-    }
+    },
 
+    colorLoader: function () {
+        //set in css root
+        document.documentElement.style.setProperty('--deny-color', quiz.deny_color);
+        document.documentElement.style.setProperty('--allow-color', quiz.allow_color);
+        document.documentElement.style.setProperty('--super-allow-color', quiz.super_allow_color);
+
+        document.documentElement.style.setProperty('--deny-color-50', 'rgba('+hexToRgb(quiz.deny_color)+', 0.5)');
+        document.documentElement.style.setProperty('--allow-color-50', 'rgba('+hexToRgb(quiz.allow_color)+', 0.5)');
+        document.documentElement.style.setProperty('--super-allow-color-50', 'rgba('+hexToRgb(quiz.super_allow_color)+', 0.5)');
+    },
+
+    alert: function (message, type = 'success') {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+        setTimeout(function () {
+            Toast.fire({
+                    title: message,
+                    icon: type,
+            })
+        }, 500);
+    },
+}
+
+function hexToRgb(hex){
+    // Verifica se o valor de entrada é um hex válido
+    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+      let c = hex.substring(1).split('');
+      // Expande a abreviação de três caracteres para seis caracteres
+      if(c.length == 3){
+        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+      }
+      // Converte os valores hexadecimais em valores decimais
+      c = '0x' + c.join('');
+      // Retorna o valor RGB em formato de string
+      return `${(c>>16)&255},${(c>>8)&255},${c&255}`;
+    }
+    // Caso contrário, retorna um valor nulo
+    return null;
 }
 
 let offsetX, offsetY;

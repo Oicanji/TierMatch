@@ -10,14 +10,14 @@ quiz.logic = {
     total_questions : 0,
     question: {},
     next: function () {
-        quiz.logic.question = quiz.data.quiz.questions[quiz.logic.actual_question];
+        quiz.logic.question = quiz.data.questions[quiz.logic.actual_question];
         quiz.logic.render();
     },
     render: function () {
         quiz.ui.setQuestion();
     },
     init: function () {
-        quiz.logic.total_questions = quiz.data.quiz.questions.length;
+        quiz.logic.total_questions = quiz.data.questions.length;
         quiz.logic.next();
         quiz.ui.setNextQuestion();
     },
@@ -57,12 +57,11 @@ quiz.logic = {
         }, 200);
     },
     end: function () {
-        console.log(quiz.logic.respost);
-
         //remove all the elements for body
-        document.querySelector('body div.cloud-container').innerHTML = "";
+        document.querySelector('body '+ quiz.div_main).innerHTML = "";
         //create a new div for the results
         quiz.result.init(quiz.logic.respost);
+        console.log(quiz.result.format());
     }
     
 }

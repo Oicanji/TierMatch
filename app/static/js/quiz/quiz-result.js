@@ -2,7 +2,7 @@ quiz.result = {
     init: function (stats) {
         html = `
             <div class="container p-5 mt-3 w-100 shadow rounded">
-                <h3>Você terminou o quiz "${quiz.data.quiz.name}"!</h3>
+                <h3>Você terminou o quiz "${quiz.data.name}"!</h3>
                 <p>Veja abaixo os resultados:</p>
                 <div class="row" id="graficos">
                     <div class="col-md-6 col-sm-6">
@@ -26,7 +26,7 @@ quiz.result = {
                 </div>
             </div>
         `;
-        document.querySelector('body div.cloud-container').innerHTML = html;
+        document.querySelector('body '+ quiz.div_main).innerHTML = html;
 
         quiz.result.render_booleans(stats);
         quiz.result.render_porcent(stats);
@@ -235,23 +235,42 @@ quiz.result = {
             }
         });
 
+    },
+
+    format: function(){
+        value = {
+            "answer": quiz.data.id,
+            "answers": quiz.logic.respost,
+        }
+        return value;
+    },
+
+    send: function(){
+        $.ajax({
+            url: 'http://localhost:3000/quiz',
+            type: 'POST',
+            data: JSON.stringify(quiz.logic.format()),
+            contentType: 'application/json',
+            error: function (data) {
+                quiz.ui.alert('Erro ao enviar os dados', 'error');
+                console.log(data);
+            }
+        });
     }
 }
 
 var coolors = [
-    "#F94144",
-    "#F3722C",
-    "#F8961E",
-    "#F9844A",
-    "#F9C74F",
-    "#90BE6D",
-    "#43AA8B",
-    "#4D908E",
+    "#ff595e",
+    "#ff924c",
+    "#ffca3a",
+    "#c5ca30",
+    "#8ac926",
+    "#36949d",
+    "#1982c4",
+    "#4267ac",
     "#577590",
-    "#277DA1",
-    '#ff0054',
-    '#9e0059',
-    '#390099'
+    "#565aa0",
+    '#6a4c93'
 ];
 
 function randomColor() {

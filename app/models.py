@@ -81,6 +81,7 @@ class Answer(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_question = db.Column(db.Integer, db.ForeignKey('question.id'))
     value = db.Column(db.String(100))
+    id_answers = db.Column(db.Integer, db.ForeignKey('answers.id'))
 
 """
 USER - Usuários

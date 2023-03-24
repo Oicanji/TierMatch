@@ -1,26 +1,36 @@
 :root {
     --title-height: 12%;
-    --char-height: 78%;
     --option-height: 10%;
     /* o resultado deve ser 100% */
 
     --widht: 22%;
+    --height: 78%;
+
+
+    --widht-hover: 22.5%;
+    --height-hover: 78.5%;
 
     --deny-color: #00b4d8;
     --allow-color: #ff595e;
-    --like-color: #f9c74f;
+    --super-allow-color: #f9c74f;
+
+    --deny-color-50: rgba(0, 180, 216, 0.5);
+    --allow-color-50: rgba(255, 89, 94, 0.5);
+    --super-allow-color-50: rgba(249, 199, 79, 0.5);
 }
 
 /* 720 width screen media query */
 @media (max-width: 990px) {
     :root {
         --widht: 40%;
+        --widht-hover: 40.5%;
     }
 }
 
 @media (max-width: 550px) {
     :root {
         --widht: 85%;
+        --widht-hover: 85.5%;
     }
 }
 
@@ -73,7 +83,7 @@
     top: 0;
     right: 0;
 
-    background-image: linear-gradient(180deg, var(--like-color) 0%, rgba(255, 255, 255, 0) 80%);
+    background-image: linear-gradient(180deg, var(--super-allow-color) 0%, rgba(255, 255, 255, 0) 80%);
     transition: height .5s ease-in-out;
 }
 
@@ -82,7 +92,7 @@
 }
 
 .meet-char {
-    height: var(--char-height);
+    height: var(--height);
     width: var(--widht);
 
     position: absolute;
@@ -94,7 +104,7 @@
     z-index: 2;
     cursor: move;
 
-    transition: transform .1s ease-in-out;
+    transition: transform .1s ease-in;
 
     background-position: center center;
     background-repeat: no-repeat;
@@ -106,6 +116,8 @@
 
 .draggable:hover {
     transform: translateX(-50%) rotate(0deg) !important;
+    width: var(--widht-hover);
+    transition: transform .1s ease-in;
 }
 
 .draggable.left {
@@ -143,7 +155,7 @@
 }
 
 .moldure.deny {
-    border: 30px solid var(--deny-color)
+    border: 30px solid var(--deny-color-50)
 }
 
 .moldure.deny .status {
@@ -151,7 +163,7 @@
 }
 
 .moldure.allow {
-    border: 30px solid var(--allow-color);
+    border: 30px solid var(--allow-color-50);
 }
 
 .moldure.allow .status {
@@ -159,11 +171,11 @@
 }
 
 .moldure.like {
-    border: 30px solid var(--like-color);
+    border: 30px solid var(--super-allow-color-50);
 }
 
 .moldure.like .status {
-    color: var(--like-color);
+    color: var(--super-allow-color);
 }
 
 .meet-char .name {
@@ -188,7 +200,7 @@
 }
 
 .meet-next {
-    height: var(--char-height);
+    height: var(--height);
     width: var(--widht);
 
     position: absolute;
@@ -275,4 +287,58 @@ body {
     bottom: 0;
     width: 100%;
     height: 100%;
+}
+
+.btn-warning {
+    background-color: var(--super-allow-color) !important;
+    border-color: var(--super-allow-color-50) !important;
+}
+.btn-warning:hover {
+    border-color: var(--super-allow-color) !important;
+    background-color: var(--super-allow-color) !important;
+    opacity: 0.8 !important;
+}
+.btn-warning:active {
+    border-color: var(--super-allow-color) !important;
+    background-color: var(--super-allow-color) !important;
+    opacity: 0.8 !important;
+}
+.btn-warning:focus {
+    box-shadow: 0 0 0 0.2rem var(--super-allow-color-50) !important;
+}
+
+.btn-danger {
+    background-color: var(--allow-color) !important;
+    border-color: var(--allow-color-50) !important;
+}
+.btn-danger:hover {
+    border-color: var(--allow-color) !important;
+    background-color: var(--allow-color) !important;
+    opacity: 0.8 !important;
+}
+.btn-danger:active {
+    border-color: var(--allow-color) !important;
+    background-color: var(--allow-color) !important;
+    opacity: 0.8 !important;
+}
+.btn-danger:focus {
+    box-shadow: 0 0 0 0.2rem var(--allow-color-50) !important;
+}
+
+.btn-primary {
+    background-color: var(--deny-color) !important;
+    border-color: var(--deny-color-50) !important;
+}
+.btn-primary:hover {
+    border-color: var(--deny-color) !important;
+    background-color: var(--deny-color) !important;
+    opacity: 0.8 !important;
+}
+.btn-primary:active {
+    border-color: var(--deny-color) !important;
+    background-color: var(--deny-color) !important;
+    opacity: 0.8 !important;
+}
+.btn-primary:focus {
+    box-shadow: 0 0 0 0.2rem var(--deny-color-50) !important;
 }
