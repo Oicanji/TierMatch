@@ -1,0 +1,24 @@
+{% extends "main/base.html" %}
+
+{% block title %}Login{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="div position-relative" style="height: 100vh;">
+        <div class="card p-5 position-absolute translate-middle">
+            <div class="card-header">
+                <h3>Faça Login</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" class="form-group">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <br />
+                    <p>Para acessar a página de registro <a href="{% url 'register' %}">clique aqui</a></p>
+                    <br />
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
