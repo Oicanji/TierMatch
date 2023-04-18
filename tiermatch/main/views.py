@@ -4,10 +4,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import *
 
+#import Question by model
+
 @login_required
 def index(request):
     return render(request, 'main/home.html', {})
-
 
 @login_required
 def cadastrar_quiz(request):
