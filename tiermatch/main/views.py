@@ -24,7 +24,7 @@ def cadastrar_quiz(request):
         else:
             args = {"code": 404, "response": "Quiz não encontrado"}
     else:
-        args = {"code": 400, "response": "Quiz não encontrado"}
+        args = {"code": 403, "response": "Ação inválida"}
             
     return args
 
@@ -53,7 +53,7 @@ def quiz(request):
         else:
             args = {"code": 404, "response": "Quiz não encontrado"}
     else:
-        args = {"code": 400, "response": "Quiz não encontrado"}
+        args = {"code": 403, "response": "Ação inválida"}
             
     return args
 
@@ -111,7 +111,7 @@ def get_category(request):
         else:
             args = {"code": 404, "response": "Categoria não encontrada"}
     else:
-        args = {"code": 400, "response": "Categoria não encontrada"}
+        args = {"code": 403, "response": "Ação inválida"}
     return args
 
 @login_required
@@ -127,23 +127,14 @@ def create_category(request):
         else:
             args = {"code": 400, "response": "Categoria não encontrada"}
     else:
-        args = {"code": 400, "response": "Categoria não encontrada"}
+        args = {"code": 403, "response": "Ação inválida"}
     return args
-
-"""
-ROTA / REMOVE / CATEGORY
-Sim não é necessário editar uma categoria, apenas remover e criar uma nova
-Tem que ser passado o id da categoria
-Tanto faz se a categoria está em uso ou não
-Pode ser enviado um parametro "substitute" para substituir a categoria por outra
-"""
-
 
 @login_required
 def remove_category(request):
     args = '{}'
     if request.method != 'POST':
-        return {"code": 400, "response": "Categoria não encontrada"}
+        return {"code": 403, "response": "Ação inválida"}
     
     category_id = request.GET.get('id')
     substitute = request.GET.get('substitute')
@@ -161,4 +152,114 @@ def remove_category(request):
             args = {"code": 404, "response": "Categoria não encontrada"}
     else:
         args = {"code": 400, "response": "Categoria não encontrada"}
+    return args
+
+"""
+ROTA / GET / QUESTIONS
+Rota de busca de questões
+É necessário passar o quiz_id que a questão pertence
+"""
+def get_question(request):
+    if request.method != 'GET':
+        return {"code": 403, "response": "Ação inválida"}
+    quiz_id = request.GET.get('quiz_id')
+    args = '{}'
+    if quiz_id:
+        questions = Question.objects.filter(quiz_id=quiz_id)
+        if questions:
+            args = {"code": 200, "response": questions}
+        else:
+            args = {"code": 404, "response": "Questões não encontradas"}
+    else:
+        args = {"code": 400, "response": "Questões não encontradas"}
+    return args
+
+"""
+ROTA / DELETE / QUESTION
+Rota de remoção de questões
+É necessário passar o id da questão
+"""
+
+
+def delete_question(request):
+    if request.method != 'POST':
+        return {"code": 403, "response": "Ação inválida"}
+    question_id = request.POST.get('id')
+    args = '{}'
+    if question_id:
+        question = Question.objects.filter(id=question_id).first()
+        quiz_original = Quiz.objects.filter(id=question.quiz_id).first()
+        if quiz_original.user_id == request.user.id:
+            question.delete()
+            args = {"code": 200, "response": "Questão removida com sucesso"}
+        else:
+            args = {"code": 403, "response": "Você não tem permissão para remover essa questão"}
+    else:
+        args = {"code": 400, "response": "Questão não encontrada"}
+
+    return args
+
+
+def set_question(request):
+    if request.method != 'POST':
+        return {"code": 403, "response": "Ação inválida"}
+    data = request.POST.get('data')
+    args = '{}'
+    if data.id:
+        quiz = Quiz.objects.filter(id=data['quiz_id']).first()
+        if quiz.user_id == request.user.id:
+            question = Question(
+                name=data['name'],
+                image=data['image'],
+                attribute=data['attribute'],
+                quiz_id=data['quiz_id'],
+            )
+            question.save()
+            args = {"code": 200, "response": question}
+        else:
+            args = {"code": 403, "response": "Você não tem permissão para adicionar questões nesse quiz"}
+    else:
+        args = {"code": 400, "response": "Quiz não encontrado"}
+    return args
+
+
+def get_answer(request):
+    if request.method != 'GET':
+        return {"code": 403, "response": "Ação inválida"}
+    question_id = request.GET.get('question_id')
+    args = '{}'
+    if question_id:
+        answers = Answer.objects.filter(question_id=question_id)
+        if answers:
+            args = {"code": 200, "response": answers}
+        else:
+            args = {"code": 404, "response": "Respostas não encontradas"}
+    else:
+        args = {"code": 400, "response": "Respostas não encontradas"}
+    return args
+
+
+def set_answer(request):
+    if request.method != 'POST':
+        return {"code": 403, "response": "Ação inválida"}
+    data = request.POST.get('data')
+    args = '{}'
+    if data:
+        if data['answers'] and data['answer']:
+            quiz = Quiz.objects.filter(id=data['answer']).first()
+            if quiz:
+                respost = Answers(id_user=request.user.id, id_quiz=quiz.id)
+                respost.save()
+                for answer in data['answers']:
+                    answer = Answer(
+                        id_question=answer['id_question'],                        
+                        id_answer=answer['id_answer'],
+                        value=answer['value'],
+                    )
+                    answer.save()
+                args = {"code": 200, "response": "Respostas salvas com sucesso"}
+            else:
+                args = {"code": 404, "response": "Quiz não encontrado"}
+        else:
+            args = {"code": 400, "response": "Respostas não encontradas"}
     return args

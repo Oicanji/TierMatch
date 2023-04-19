@@ -422,6 +422,7 @@ def set_question():
             else:
                 return jsonify({'code': 404, 'message': 'Quiz não encontrado'})
         else:
+            
             return jsonify({'code': 400, 'message': 'Parâmetros inválidos'})
     else:
         return jsonify({'code': 400, 'message': 'Parâmetros inválidos'})
