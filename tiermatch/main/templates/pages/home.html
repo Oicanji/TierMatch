@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% load static %}
+<script src="{% static 'js/pages/category.js' %}"></script>
+<script src="{% static 'js/pages/question.js' %}"></script>
+<script src="{% static 'js/pages/quiz_page.js' %}"></script>
+<script src="{% static 'js/pages/attributes.js' %}"></script>
+
+{% csrf_token %}
+
+<h1 class="text-center">Home</h1>
+
+<script>
+</script>
+<button class="btn btn-primary" onclick="category.send({name: 'Teste', color: 'FF0000'});"> testar  envio de attribute </button>
+
+{% endblock %}

@@ -8,7 +8,7 @@ from .models import *
 
 @login_required
 def index(request):
-    return render(request, 'main/home.html', {})
+    return render(request, 'pages/home.html', {})
 
 @login_required
 def cadastrar_quiz(request):
@@ -117,6 +117,7 @@ def get_category(request):
 @login_required
 def create_category(request):
     args = '{}'
+    print(request.method)
     if request.method == 'POST':
         name = request.POST.get('name')
         color = request.POST.get('color')

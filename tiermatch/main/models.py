@@ -14,8 +14,8 @@ class Quiz(models.Model):
     deny_color = models.CharField(max_length=7)
     super_allow_color = models.CharField(max_length=7)
     
-    list_answers = models.ManyToManyField('Question', through='Categories')
-    list_categories = models.ManyToManyField('Category', through='Categories')
+    list_answers = models.ManyToManyField('Question')
+    list_categories = models.ManyToManyField('Category')
 
 class Question(models.Model):
     id = models.AutoField(primary_key=True)
