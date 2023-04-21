@@ -114,6 +114,7 @@ def get_category(request):
         data = categories
     elif data.get('id'):
         category = Category.objects.filter(id=data.get('id')).first()
+        data = category
     else:
         category = Category.objects.all()
         for cat in category:
@@ -139,7 +140,7 @@ def create_category(request):
     
 @login_required
 def remove_category(request):
-    args = '{}'
+    args = {'method': 'remover', 'suffix': 'categoria', 'route': 'category/remove'}
     if request.method != 'POST':
         return {"code": 403, "response": "Ação inválida"}
     
@@ -154,11 +155,11 @@ def remove_category(request):
                     question.category_id = substitute
                     question.save()
             category.delete()   
-            args = {"code": 200, "response": "Categoria removida com sucesso"}
+            args = {200, args}
         else:
-            args = {"code": 404, "response": "Categoria não encontrada"}
+            args = {404, args}
     else:
-        args = {"code": 400, "response": "Categoria não encontrada"}
+        args = {400, args}
     return args
 
 """
