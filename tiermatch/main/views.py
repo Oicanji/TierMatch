@@ -96,9 +96,9 @@ name = nome do quiz
 description = descrição do quiz
 create_by = id do usuário que está criando o quiz
 
-super_allow_alias = alias do super_allow
-allow_alias = alias do allow
-deny_alias = alias do deny
+super_allow_allias = alias do super_allow
+allow_allias = alias do allow
+deny_allias = alias do deny
 
 super_allow_color = cor do super_allow
 allow_color = cor do allow
@@ -117,9 +117,9 @@ def set_quiz(request):
         "name": data.get('name'),
         "description": data.get('description'),   
         "create_by": data.get('create_by'),
-        "super_allow_alias": data.get('super_allow_alias'),
-        "allow_alias": data.get('allow_alias'),
-        "deny_alias": data.get('deny_alias'),
+        "super_allow_allias": data.get('super_allow_allias'),
+        "allow_allias": data.get('allow_allias'),
+        "deny_allias": data.get('deny_allias'),
         "super_allow_color": data.get('super_allow_color'),
         "allow_color": data.get('allow_color'),
         "deny_color": data.get('deny_color'),
@@ -127,7 +127,7 @@ def set_quiz(request):
     if not all(params):
         return response(400, args)
     quiz = Quiz(name=params.get('name'), description=params.get('description'), create_by=params.get('create_by'),
-                super_allow_alias=params.get('super_allow_alias'), allow_alias=params.get('allow_alias'), deny_alias=params.get('deny_alias'),
+                super_allow_allias=params.get('super_allow_allias'), allow_allias=params.get('allow_allias'), deny_allias=params.get('deny_allias'),
                 super_allow_color=params.get('super_allow_color'), allow_color=params.get('allow_color'), deny_color=params.get('deny_color'))
 
     quiz.save()
@@ -142,6 +142,30 @@ Apenas o usuário que criou o quiz pode editar
 Todos os parametros são opcionais, mas pelo menos um tem que ser passado, o id do quiz
 """
 
+@login_required
+def edit_quiz(request):
+    args = {'method': 'editar', 'suffix': 'quiz', 'route': 'quiz/edit'}
+    if request.method != 'POST':
+        return response(403, args)
+    data = json.loads(request.body)
+    if not data:
+        return response(400, args)
+    quiz = Quiz.objects.filter(id=data.get('id')).first()
+    res = []
+    if quiz:
+        for key in data:
+            if key not in ['name', 'description', 'super_allow_allias', 'allow_allias', 'deny_allias', 'super_allow_color', 'allow_color', 'deny_color']:
+                return response(400, args)
+        for key in data:
+            if key in ['name', 'description', 'super_allow_allias', 'allow_allias', 'deny_allias', 'super_allow_color', 'allow_color', 'deny_color']:
+                setattr(quiz, key, data.get(key))
+        quiz.save()
+        quiz = Quiz.objects.filter(id=quiz.id).first()
+        for i in quiz:
+            res.append({'id': category.id, 'name': category.name, 'color': category.color})
+        return response(200, args)
+    else:
+        return response(404, args)
 
 
 """
@@ -156,22 +180,12 @@ def get_category(request):
     data = json.loads(request.body)
 
     res = []
-<<<<<<< HEAD
-    if data.get('ids'):
-        categories = Category.objects.filter(id__in=data.get('ids'))
-        data = categories
-    elif data.get('id'):
-        category = Category.objects.filter(id=data.get('id')).first()
-        data = category
-=======
     if data.get('categories'):
         ids = data.get('categories')
         for id in ids:
             category = Category.objects.filter(id=id).first()
             if category:
                 res.append({'id': category.id, 'name': category.name, 'color': category.color})
-                
->>>>>>> c9f5f4b9d4cff8be8d6b5f07b48a3131da40ec03
     else:
         category = Category.objects.all()
         for cat in category:
