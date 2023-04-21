@@ -1,6 +1,6 @@
 import json
 from django.shortcuts import render
-
+from datetime import datetime
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
@@ -110,13 +110,15 @@ def set_quiz(request):
     args = {'method': 'criar', 'suffix': 'quiz', 'route': 'quiz/set'}
     if request.method != 'POST':
         return response(403, args)
+    current_user = request.user
     data = json.loads(request.body)
     if not data:
         return response(400, args)
     params = {
         "name": data.get('name'),
         "description": data.get('description'),   
-        "create_by": data.get('create_by'),
+        "create_by":  current_user.id,
+        "create_at": datetime.now(),
         "super_allow_allias": data.get('super_allow_allias'),
         "allow_allias": data.get('allow_allias'),
         "deny_allias": data.get('deny_allias'),
@@ -161,8 +163,10 @@ def edit_quiz(request):
                 setattr(quiz, key, data.get(key))
         quiz.save()
         quiz = Quiz.objects.filter(id=quiz.id).first()
-        for i in quiz:
-            res.append({'id': category.id, 'name': category.name, 'color': category.color})
+        res.append({"name": quiz.name, "description": quiz.description, "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, 
+                    "deny_allias": quiz.deny_allias, "super_allow_color": quiz.super_allow_color, 
+                    "allow_color": quiz.allow_color, "deny_color": quiz.deny_color})
+        args['response'] = res
         return response(200, args)
     else:
         return response(404, args)
