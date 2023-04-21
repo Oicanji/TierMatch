@@ -117,7 +117,7 @@ def get_category(request):
     return args
 
 @login_required
-def create_category(request, name, color):
+def create_category(request):
     args = {'method': 'criar', 'suffix': 'categoria', 'route': 'category/create'}
     if request.method == 'POST':
         data = json.loads(request.body)
