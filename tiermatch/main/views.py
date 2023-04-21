@@ -118,7 +118,7 @@ def get_category(request):
         category = Category.objects.all()
         for cat in category:
             data[cat.id] = {'name': cat.name, 'color': cat.color}
-    args['data'] = data
+    args['response'] = data
     return response(200, args)
 
 @login_required
