@@ -128,7 +128,7 @@ def set_quiz(request):
     }
     if not all(params):
         return response(400, args)
-    quiz = Quiz(name=params.get('name'), description=params.get('description'), create_by=params.get('create_by'),
+    quiz = Quiz(name=params.get('name'), description=params.get('description'), create_by=params.get('create_by'), create_at=params.get('create_at'),
                 super_allow_allias=params.get('super_allow_allias'), allow_allias=params.get('allow_allias'), deny_allias=params.get('deny_allias'),
                 super_allow_color=params.get('super_allow_color'), allow_color=params.get('allow_color'), deny_color=params.get('deny_color'))
 
