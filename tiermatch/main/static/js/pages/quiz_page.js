@@ -29,59 +29,44 @@ quiz = {
         question.init(type);
         category.init(type);
     },
-    submit: function () {
-        var name = $('#name').val();
-        var description = $('#description').val();
-        var super_allow_alias = $('super_allow_alias').val();
-        var super_allow_color = $('super_allow_color').val();
-        var allow_alias = $('allow_alias').val();
-        var allow_color = $('allow_color').val();
-        var deny_alias = $('deny_alias').val();
-        var deny_color = $('deny_color').val();
+    submit: function (params = false) {
+        if (params == false) {
+            var name = $('#name').val();
+            var description = $('#description').val();
+            var super_allow_alias = $('super_allow_alias').val();
+            var super_allow_color = $('super_allow_color').val();
+            var allow_alias = $('allow_alias').val();
+            var allow_color = $('allow_color').val();
+            var deny_alias = $('deny_alias').val();
+            var deny_color = $('deny_color').val();
+            data = {
+                name,
+                description,
+                super_allow_allias,
+                super_allow_color,
+                allow_allias,
+                allow_color,
+                deny_allias,
+                deny_color,
+            }
+        }else{
+            data = params;
+        }
+        data = JSON.stringify(data);
 
         $.ajax({
             url: '/quiz/create/',
             method: 'POST',
-            data: {
-                name,
-                description,
-                super_allow_alias,
-                super_allow_color,
-                allow_alias,
-                allow_color,
-                deny_alias,
-            },
+            data: data,
             dataType: 'json',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
             success: function (response) {
-                quiz_atual = {
-                    name,
-                    description,
-                    super_allow_alias,
-                    super_allow_color,
-                    allow_alias,
-                    allow_color,
-                    deny_alias,
-                    deny_color,
-                    id: response.id
-                }
-                quiz.edit();
-                Swal.fire({
-                    title: 'Quiz cadastrado com sucesso!',
-                    text: 'O quiz foi cadastrado com sucesso!',
-                    icon: 'success',
-                    confirmButtonText: 'Ok'
-                });
+                console.log(response);
             }, error: function (error) {
-                Swal.fire({
-                    title: 'Erro ao cadastrar!',
-                    text: error.responseJSON.message,
-                    icon: 'danger',
-                    confirmButtonText: 'Ok'
-                });
+                console.log(error);
             }
         });
         
