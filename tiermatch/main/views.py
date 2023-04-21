@@ -105,24 +105,25 @@ allow_color = cor do allow
 deny_color = cor do deny
 """
 
-
+@login_required
 def set_quiz(request):
     args = {'method': 'criar', 'suffix': 'quiz', 'route': 'quiz/set'}
     if request.method != 'POST':
         return response(403, args)
-    if not data = json.loads(request.body):
+    data = json.loads(request.body)
+    if not data:
         return response(400, args)
-    params = [
-        name = data.get('name')
-        description = data.get('description')    
-        create_by = data.get('create_by')
-        super_allow_alias = data.get('super_allow_alias')
-        allow_alias = data.get('allow_alias')
-        deny_alias = data.get('deny_alias')
-        super_allow_color = data.get('super_allow_color')
-        allow_color = data.get('allow_color')
-        deny_color = data.get('deny_color')
-    ]
+    params = {
+        "name": data.get('name'),
+        "description": data.get('description'),   
+        "create_by": data.get('create_by'),
+        "super_allow_alias": data.get('super_allow_alias'),
+        "allow_alias": data.get('allow_alias'),
+        "deny_alias": data.get('deny_alias'),
+        "super_allow_color": data.get('super_allow_color'),
+        "allow_color": data.get('allow_color'),
+        "deny_color": data.get('deny_color'),
+    }
     if not all(params):
         return response(400, args)
     quiz = Quiz(name=params.get('name'), description=params.get('description'), create_by=params.get('create_by'),
@@ -134,7 +135,12 @@ def set_quiz(request):
     args['response'] = quiz
     return response(200, args)
 
-
+"""
+ROTA / EDIT / QUIZ
+Rota de cadastro da edição do quiz
+Apenas o usuário que criou o quiz pode editar
+Todos os parametros são opcionais, mas pelo menos um tem que ser passado, o id do quiz
+"""
 
 
 
@@ -150,10 +156,12 @@ def get_category(request):
     data = json.loads(request.body)
 
     res = []
-    if data.get('categories'):
-        category = Category.objects.filter(id__in=data.get('ids'))
-        for cat in category:
-            res.append({'id': cat.id, 'name': cat.name, 'color': cat.color})
+    if data.get('ids'):
+        categories = Category.objects.filter(id__in=data.get('ids'))
+        data = categories
+    elif data.get('id'):
+        category = Category.objects.filter(id=data.get('id')).first()
+        data = category
     else:
         category = Category.objects.all()
         for cat in category:
