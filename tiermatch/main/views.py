@@ -45,19 +45,20 @@ Ele vai passar o id do quiz e vai retornar o quiz
 """
 
 @login_required
-def quiz(request):
-    quiz_id = request.GET.get('id')
-    args = '{}'
-    if quiz_id:
-        quiz = Quiz.objects.filter(id=quiz_id).first()
+def get_quiz(request):
+    args = {'method': 'buscar', 'suffix': 'quiz', 'route': 'quiz/get'}
+    if request.method != 'GET':
+        return response(403, args)
+    data = json.loads(request.body)
+    if data.get('id'):
+        quiz = Quiz.objects.filter(id=data.get('id')).first()
         if quiz:
-            args = {"code": 200, "response": quiz}
+            args['response'] = [quiz]
+            return response(200, args)
         else:
-            args = {"code": 404, "response": "Quiz não encontrado"}
+            return response(404, args)
     else:
-        args = {"code": 403, "response": "Ação inválida"}
-            
-    return args
+        return response(400, args)
 
 
 
@@ -73,6 +74,19 @@ Pode ser passado a ordenação dos resultados por id em ordem crescente ou decre
 
 Por default, ele vai ordenar os resultados por ordem decrescente de id
 """
+
+# @login_required
+# def get_quizzes(request):
+#     args = {'method': 'buscar', 'suffix': 'quiz', 'route': 'quiz/get'}
+#     if request.method != 'GET':
+#         return response(403, args)
+#     data = json.loads(request.body)
+#     for key in data:
+#         if key not in ['like', 'category', 'user', 'offset', 'limit', 'id']:
+#             return response(400, args)
+
+
+
 
 """
 ROTA / SET / QUIZ
@@ -92,15 +106,40 @@ deny_color = cor do deny
 """
 
 
+def set_quiz(request):
+    args = {'method': 'criar', 'suffix': 'quiz', 'route': 'quiz/set'}
+    if request.method != 'POST':
+        return response(403, args)
+    if not data = json.loads(request.body):
+        return response(400, args)
+    params = [
+        name = data.get('name')
+        description = data.get('description')    
+        create_by = data.get('create_by')
+        super_allow_alias = data.get('super_allow_alias')
+        allow_alias = data.get('allow_alias')
+        deny_alias = data.get('deny_alias')
+        super_allow_color = data.get('super_allow_color')
+        allow_color = data.get('allow_color')
+        deny_color = data.get('deny_color')
+    ]
+    if not all(params):
+        return response(400, args)
+    quiz = Quiz(name=params.get('name'), description=params.get('description'), create_by=params.get('create_by'),
+                super_allow_alias=params.get('super_allow_alias'), allow_alias=params.get('allow_alias'), deny_alias=params.get('deny_alias'),
+                super_allow_color=params.get('super_allow_color'), allow_color=params.get('allow_color'), deny_color=params.get('deny_color'))
+
+    quiz.save()
+    quiz = Quiz.objects.filter(id=quiz.id).first()
+    args['response'] = quiz
+    return response(200, args)
+
+
+
+
+
 """
-
-class Category(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    color = models.CharField(max_length=100)
-
 create a routes get, set and remove for category 
-
 """
 @login_required
 def get_category(request):
