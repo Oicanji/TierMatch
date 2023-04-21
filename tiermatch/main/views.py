@@ -180,21 +180,12 @@ def get_category(request):
     data = json.loads(request.body)
 
     res = []
-<<<<<<< Updated upstream
     if data.get('categories'):
         ids = data.get('categories')
         for id in ids:
             category = Category.objects.filter(id=id).first()
             if category:
                 res.append({'id': category.id, 'name': category.name, 'color': category.color})
-=======
-    if data.get('ids'):
-        categories = Category.objects.filter(id__in=data.get('ids'))
-        data = categories
-    elif data.get('id'):
-        category = Category.objects.filter(id=data.get('id')).first()
-        data = category
->>>>>>> Stashed changes
     else:
         category = Category.objects.all()
         for cat in category:
