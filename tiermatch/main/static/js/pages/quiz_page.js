@@ -40,7 +40,7 @@ quiz = {
         var deny_color = $('deny_color').val();
 
         $.ajax({
-            url: '/set/quiz',
+            url: '/quiz/create/',
             method: 'POST',
             data: {
                 name,
@@ -52,6 +52,10 @@ quiz = {
                 deny_alias,
             },
             dataType: 'json',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
             success: function (response) {
                 quiz_atual = {
                     name,

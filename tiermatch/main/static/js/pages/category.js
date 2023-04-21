@@ -16,6 +16,8 @@ const category = {
         })
         .then(response => response.json())
         .then(data => {
+            //refresh
+            category.build();
             console.log(data);
         })
         .catch((error) => {
@@ -50,6 +52,7 @@ const category = {
         });
     },
     delete: function (id) {
+        $('#categoria_div_'+id).remove();
         $.ajax({
             url: '/category/remove/',
             type: 'POST',
@@ -60,6 +63,8 @@ const category = {
             },
             dataType: 'json',
             success: function(response) {
+                //refresh
+                category.build();
                 return response;
             },
             error: function(xhr, status, error) {
@@ -67,25 +72,38 @@ const category = {
             }
         });
     },
+    active: function (id) {
+        if($('#categoria_div_'+id+' .categoria_div').hasClass('active')){
+            $('#categoria_div_'+id+' .categoria_div').removeClass('active');
+            $('#categoria_div_'+id+' .categoria_div button.close.delete').show();
+            $('#categoria_div_'+id+' .categoria_div button.close.add span').html('+');
+        }else{
+            $('#categoria_div_'+id+' .categoria_div').addClass('active');
+            $('#categoria_div_'+id+' .categoria_div button.close.delete').hide();
+            $('#categoria_div_'+id+' .categoria_div button.close.add span').html('-');
+        }
+    },
     build: async function () {
         const response = await category.get(false, category.draw);
     },
     draw: function (response) {
-        console.log('asdsdaasd');
         $('#categoria_list').html('');
         categories = response.data;
-        console.log(categories);
         for (let i = 0; i < categories.length; i++) {
             const item = categories[i];
-            console.log(item);
+            // cut more than 20 chars
+            if (item.name.length > 20) {
+                item.name = item.name.substring(0, 20) + '...';
+            }
+
             $('#categoria_list').append(
-                `<div class="col-1 p-1" id="${item.id}">
-                    <span class="badge badge-primary categoria_div">
+                `<div class="col-2 p-1" id="categoria_div_${item.id}">
+                    <span class="badge badge-primary categoria_div" style="background-color: ${item.color};">
                         ${item.name}
-                        <button type="button" class="close add">
+                        <button type="button" class="close add" onclick="category.active(${item.id})">
                             <span aria-hidden="true">+</span>
                         </button>
-                        <button type="button" class="close" onclick="category.delete(${item.id})">
+                        <button type="button" class="close delete" onclick="category.delete(${item.id})">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </span>
