@@ -139,30 +139,24 @@ def create_category(request):
         return response(200, args)
     else:
         return response(400, args)
-    
+
+
+# LEMBRAR DE FAZER O PARAMETRO SUBSTITUTE
 @login_required
 def remove_category(request):
     args = {'method': 'remover', 'suffix': 'categoria', 'route': 'category/remove'}
     if request.method != 'POST':
-        return {"code": 403, "response": "Ação inválida"}
-    
-    category_id = request.GET.get('id')
-    substitute = request.GET.get('substitute')
-    if category_id:
-        category = Category.objects.filter(id=category_id).first()
+        return response(403, args)
+    data = json.loads(request.body)
+    if data.get('id'):
+        category = Category.objects.filter(id=data.get('id')).first()
         if category:
-            if substitute:
-                questions = Question.objects.filter(category_id=category_id)
-                for question in questions:
-                    question.category_id = substitute
-                    question.save()
-            category.delete()   
-            args = {200, args}
+            category.delete()
+            return response(200, args)
         else:
-            args = {404, args}
+            return response(404, args)
     else:
-        args = {400, args}
-    return args
+        return response(400, args)
 
 """
 ROTA / GET / QUESTIONS
