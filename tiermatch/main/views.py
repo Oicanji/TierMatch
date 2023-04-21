@@ -45,7 +45,6 @@ Ele vai passar o id do quiz e vai retornar o quiz
 """
 
 @login_required
-def quiz(request):
 def get_quiz(request):
     args = {'method': 'buscar', 'suffix': 'quiz', 'route': 'quiz/get'}
     if request.method != 'GET':
