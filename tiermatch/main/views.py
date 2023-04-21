@@ -1,10 +1,12 @@
+import json
 from django.shortcuts import render
 
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+
 from .models import *
 
-#import Question by model
+from .reponse import response
 
 @login_required
 def index(request):
@@ -115,22 +117,21 @@ def get_category(request):
     return args
 
 @login_required
-def create_category(request):
-    args = '{}'
-    print(request.method)
+def create_category(request, name, color):
+    args = {'method': 'criar', 'suffix': 'categoria', 'route': 'category/create'}
     if request.method == 'POST':
-        name = request.POST.get('name')
-        color = request.POST.get('color')
+        data = json.loads(request.body)
+        name = data.get('name')
+        color = data.get('color')
         if name and color:
             category = Category(name=name, color=color)
             category.save()
-            args = {"code": 200, "response": category}
+            return response(200, args)
         else:
-            args = {"code": 400, "response": "Categoria não encontrada"}
+            return response(400, args)
     else:
-        args = {"code": 403, "response": "Ação inválida"}
-    return args
-
+        return response(403, args)
+    
 @login_required
 def remove_category(request):
     args = '{}'

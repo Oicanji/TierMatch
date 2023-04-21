@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\Aluno\Documents\SistemasParaInternetII\ProgramacaoWeb2\welcome-to-django\django-env"
+VIRTUAL_ENV="D:\Programming\Forks Repository\TierMatch\django-env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

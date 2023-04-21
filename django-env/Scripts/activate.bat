@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\Aluno\Documents\SistemasParaInternetII\ProgramacaoWeb2\welcome-to-django\django-env
+set VIRTUAL_ENV=D:\Programming\Forks Repository\TierMatch\django-env
 
 if not defined PROMPT set PROMPT=$P$G
 
