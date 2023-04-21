@@ -37,4 +37,6 @@ def response(code_int, params = {}):
 
     if 'route' in params:
         res['route'] = params['route']
+
+    print(res)
     return HttpResponse(dumps(res), content_type='text/plain')

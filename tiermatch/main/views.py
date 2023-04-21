@@ -111,12 +111,10 @@ def get_category(request):
     data = json.loads(request.body)
 
     res = []
-    if data.get('ids'):
-        categories = Category.objects.filter(id__in=data.get('ids'))
-        data = categories
-    elif data.get('id'):
-        category = Category.objects.filter(id=data.get('id')).first()
-        data = category
+    if data.get('categories'):
+        category = Category.objects.filter(id__in=data.get('ids'))
+        for cat in category:
+            res.append({'id': cat.id, 'name': cat.name, 'color': cat.color})
     else:
         category = Category.objects.all()
         for cat in category:

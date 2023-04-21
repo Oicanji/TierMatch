@@ -24,17 +24,17 @@ const category = {
             console.error(error.json());
         });
     },
-    get: function (id = false, callback = false) {
+    get: function (id = [], callback = false) {
         data = {};
-        if (typeof id === 'array') {
-            data = { 'ids': id };
-        }else if(typeof id === 'number'){
-            data = { 'id': [id] };
+        if (id.length != 0) {
+            data.categories = id;
         }
+        data = JSON.stringify(data);
+        console.log(data);
         $.ajax({
             url: '/category/get/',
             type: 'POST',
-            data: JSON.stringify(category),
+            data: data,
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
@@ -84,7 +84,7 @@ const category = {
         }
     },
     build: async function () {
-        const response = await category.get(false, category.draw);
+        const response = await category.get([], category.draw);
     },
     draw: function (response) {
         $('#categoria_list').html('');
