@@ -16,7 +16,7 @@ const category = {
         })
         .then(response => response.json())
         .then(data => {
-            return data;
+            console.log(data);
         })
         .catch((error) => {
             console.error(error);

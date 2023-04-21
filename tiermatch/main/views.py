@@ -105,18 +105,21 @@ create a routes get, set and remove for category
 @login_required
 def get_category(request):
     args = {'method': 'buscar', 'suffix': 'categoria', 'route': 'category/get'}
-    if request.method != 'GET':
+    data = {}
+    if request.method != 'POST':
         return response(403, args)
     data = json.loads(request.body)
     if data.get('ids'):
         categories = Category.objects.filter(id__in=data.get('ids'))
-        return response(200, args, categories)
+        data = categories
     elif data.get('id'):
         category = Category.objects.filter(id=data.get('id')).first()
-        return response(200, args, category)
+        data = category
     else:
         categories = Category.objects.all()
-        return response(200, args, categories)
+        data = categories
+    args['data'] = data
+    return response(200, args)
 
 @login_required
 def create_category(request):
