@@ -112,9 +112,12 @@ def get_category(request):
 
     res = []
     if data.get('categories'):
-        category = Category.objects.filter(id__in=data.get('ids'))
-        for cat in category:
-            res.append({'id': cat.id, 'name': cat.name, 'color': cat.color})
+        ids = data.get('categories')
+        for id in ids:
+            category = Category.objects.filter(id=id).first()
+            if category:
+                res.append({'id': category.id, 'name': category.name, 'color': category.color})
+                
     else:
         category = Category.objects.all()
         for cat in category:
