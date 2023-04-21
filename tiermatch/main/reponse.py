@@ -16,10 +16,11 @@ def response(code_int, params = {}):
     data = ''
     method = ''
     suffix = ''
+    print(params)
     if 'response' in params and isinstance(params['response'], dict):
-        print(params['response'])
         data = dumps(params['response'])
-        print(data)
+    elif 'response' in params:
+        data = params['response']
         
     if 'method' in params:
         method = 'ao ' +params['method']+ ' '
@@ -37,4 +38,5 @@ def response(code_int, params = {}):
 
     if 'route' in params:
         res['route'] = params['route']
-    return HttpResponse(dumps(res), content_type='text/plain')
+
+    return HttpResponse(res, content_type='text/plain')

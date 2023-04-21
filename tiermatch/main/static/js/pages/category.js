@@ -42,7 +42,7 @@ const category = {
             console.log(data);
         })
         .catch((error) => {
-            console.error(error.json());
+            console.error(error);
         });
     },
 }

@@ -114,10 +114,10 @@ def get_category(request):
         data = categories
     elif data.get('id'):
         category = Category.objects.filter(id=data.get('id')).first()
-        data = category
     else:
-        categories = Category.objects.all()
-        data = categories
+        category = Category.objects.all()
+        for cat in category:
+            data[cat.id] = {'name': cat.name, 'color': cat.color}
     args['data'] = data
     return response(200, args)
 
