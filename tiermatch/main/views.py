@@ -117,7 +117,7 @@ def set_quiz(request):
     params = {
         "name": data.get('name'),
         "description": data.get('description'),   
-        "create_by":  current_user.id,
+        "create_by_id":  current_user.id,
         "create_at": datetime.now(),
         "super_allow_allias": data.get('super_allow_allias'),
         "allow_allias": data.get('allow_allias'),
@@ -128,7 +128,7 @@ def set_quiz(request):
     }
     if not all(params):
         return response(400, args)
-    quiz = Quiz(name=params.get('name'), description=params.get('description'), create_by=params.get('create_by'), create_at=params.get('create_at'),
+    quiz = Quiz(name=params.get('name'), description=params.get('description'), create_by_id=params.get('create_by_id'), create_at=params.get('create_at'),
                 super_allow_allias=params.get('super_allow_allias'), allow_allias=params.get('allow_allias'), deny_allias=params.get('deny_allias'),
                 super_allow_color=params.get('super_allow_color'), allow_color=params.get('allow_color'), deny_color=params.get('deny_color'))
 

@@ -31,23 +31,15 @@ quiz = {
     },
     submit: function (params = false) {
         if (params == false) {
-            var name = $('#name').val();
-            var description = $('#description').val();
-            var super_allow_alias = $('super_allow_alias').val();
-            var super_allow_color = $('super_allow_color').val();
-            var allow_alias = $('allow_alias').val();
-            var allow_color = $('allow_color').val();
-            var deny_alias = $('deny_alias').val();
-            var deny_color = $('deny_color').val();
             data = {
-                name,
-                description,
-                super_allow_allias,
-                super_allow_color,
-                allow_allias,
-                allow_color,
-                deny_allias,
-                deny_color,
+                name: $('#name').val(),
+                description: $('#description').val(),
+                super_allow_allias: $('#super_allow_alias').val(),
+                super_allow_color: $('#super_allow_color').val(),
+                allow_allias: $('#allow_alias').val(),
+                allow_color: $('#allow_color').val(),
+                deny_allias: $('#deny_alias').val(),
+                deny_color: $('#deny_color').val(),
             }
         }else{
             data = params;
