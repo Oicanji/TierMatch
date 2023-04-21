@@ -1,3 +1,7 @@
+var headers = {
+    'Content-type': 'application/json',
+    'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+};
 const category = {
     send: function (data = false) {
         if (!data) {
@@ -29,20 +33,21 @@ const category = {
         }else if(typeof id === 'number'){
             data = { 'id': [id] };
         }
-        fetch('/category/get/', {
-            method: 'POST',
+        $.ajax({
+            url: '/category/get/',
+            type: 'POST',
+            data: JSON.stringify(category),
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch((error) => {
-            console.error(error);
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
         });
     },
 }
