@@ -85,7 +85,7 @@ const category = {
                         <button type="button" class="close add">
                             <span aria-hidden="true">+</span>
                         </button>
-                        <button type="button" class="close">
+                        <button type="button" class="close" onclick="category.delete(${item.id})">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </span>
