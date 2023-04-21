@@ -104,33 +104,35 @@ create a routes get, set and remove for category
 """
 @login_required
 def get_category(request):
-    category_id = request.GET.get('id')
-    args = '{}'
-    if category_id:
-        category = Category.objects.filter(id=category_id).first()
-        if category:
-            args = {"code": 200, "response": category}
-        else:
-            args = {"code": 404, "response": "Categoria não encontrada"}
+    args = {'method': 'buscar', 'suffix': 'categoria', 'route': 'category/get'}
+    if request.method != 'GET':
+        return response(403, args)
+    data = json.loads(request.body)
+    if data.get('ids'):
+        categories = Category.objects.filter(id__in=data.get('ids'))
+        return response(200, args, categories)
+    elif data.get('id'):
+        category = Category.objects.filter(id=data.get('id')).first()
+        return response(200, args, category)
     else:
-        args = {"code": 403, "response": "Ação inválida"}
-    return args
+        categories = Category.objects.all()
+        return response(200, args, categories)
 
 @login_required
 def create_category(request):
     args = {'method': 'criar', 'suffix': 'categoria', 'route': 'category/create'}
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        name = data.get('name')
-        color = data.get('color')
-        if name and color:
-            category = Category(name=name, color=color)
-            category.save()
-            return response(200, args)
-        else:
-            return response(400, args)
-    else:
+    if request.method != 'POST':
         return response(403, args)
+
+    data = json.loads(request.body)
+    name = data.get('name')
+    color = data.get('color')
+    if name and color:
+        category = Category(name=name, color=color)
+        category.save()
+        return response(200, args)
+    else:
+        return response(400, args)
     
 @login_required
 def remove_category(request):

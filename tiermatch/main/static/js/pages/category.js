@@ -14,58 +14,35 @@ const category = {
             },
             body: JSON.stringify(data)
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao criar Categoria.');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            console.log('Categoria criada com sucesso.');
+            return data;
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(error);
         });
     },
-    get: function () {
-        return $.ajax({
-            url: '/get/category',
-            type: 'GET',
-            dataType: 'json',
-            error: function (xhr, status, error) {
-                console.log(error);
+    get: function (id = false) {
+        data = {};
+        if (typeof id === 'array') {
+            data = { 'ids': id };
+        }else if(typeof id === 'number'){
+            data = { 'id': [id] };
+        }
+        fetch('/category/get/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
-            success: function (data) {
-                return data;
-            }
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error(error);
         });
     },
-    get_all: function () {
-        return $.ajax({
-            url: '/get/categories',
-            type: 'GET',
-            dataType: 'json',
-            error: function (xhr, status, error) {
-                console.log(error);
-            },
-            success: function (data) {
-                return data;
-            }
-        });
-    },
-    delete: function (id) {
-        return $.ajax({
-            url: '/remove/category',
-            type: 'POST',
-            data: { 'id': id },
-            dataType: 'json',
-            error: function (xhr, status, error) {
-                console.log(error);
-                return false;
-            },
-            success: function (data) {
-                return true;
-            }
-        });
-    }
 }
