@@ -109,6 +109,8 @@ def get_category(request):
     if request.method != 'POST':
         return response(403, args)
     data = json.loads(request.body)
+
+    res = []
     if data.get('ids'):
         categories = Category.objects.filter(id__in=data.get('ids'))
         data = categories
@@ -117,8 +119,8 @@ def get_category(request):
     else:
         category = Category.objects.all()
         for cat in category:
-            data[cat.id] = {'name': cat.name, 'color': cat.color}
-    args['response'] = data
+            res.append({'id': cat.id, 'name': cat.name, 'color': cat.color})
+    args['response'] = res
     return response(200, args)
 
 @login_required

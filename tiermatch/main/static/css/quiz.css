@@ -1,0 +1,344 @@
+:root {
+    --title-height: 12%;
+    --option-height: 10%;
+    /* o resultado deve ser 100% */
+
+    --widht: 22%;
+    --height: 78%;
+
+
+    --widht-hover: 22.5%;
+    --height-hover: 78.5%;
+
+    --deny-color: #00b4d8;
+    --allow-color: #ff595e;
+    --super-allow-color: #f9c74f;
+
+    --deny-color-50: rgba(0, 180, 216, 0.5);
+    --allow-color-50: rgba(255, 89, 94, 0.5);
+    --super-allow-color-50: rgba(249, 199, 79, 0.5);
+}
+
+/* 720 width screen media query */
+@media (max-width: 990px) {
+    :root {
+        --widht: 40%;
+        --widht-hover: 40.5%;
+    }
+}
+
+@media (max-width: 550px) {
+    :root {
+        --widht: 85%;
+        --widht-hover: 85.5%;
+    }
+}
+
+.meet-canva {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    transition: all 0.3s ease-out;
+}
+
+
+.fade-deny {
+    height: 100%;
+    width: 0;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-image: linear-gradient(90deg, var(--deny-color) 0%, rgba(255, 255, 255, 0) 100%);
+    transition: width .5s ease-in-out;
+}
+
+.fade-deny.show-this {
+    width: 20%;
+}
+
+.fade-allow {
+    height: 100%;
+    width: 0;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, var(--allow-color) 100%);
+    transition: width .5s ease-in-out;
+}
+
+.fade-allow.show-this {
+    width: 20%;
+}
+
+.fade-like {
+    height: 0;
+    width: 100%;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    background-image: linear-gradient(180deg, var(--super-allow-color) 0%, rgba(255, 255, 255, 0) 80%);
+    transition: height .5s ease-in-out;
+}
+
+.fade-like.show-this {
+    height: 20%;
+}
+
+.meet-char {
+    height: var(--height);
+    width: var(--widht);
+
+    position: absolute;
+    top: var(--title-height);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ccc;
+    border-radius: 4px;
+    z-index: 2;
+    cursor: move;
+
+    transition: transform .1s ease-in;
+
+    background-position: center center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.draggable:hover {
+    transform: translateX(-50%) rotate(0deg) !important;
+    width: var(--widht-hover);
+    transition: transform .1s ease-in;
+}
+
+.draggable.left {
+    transform: translateX(-50%) rotate(-4deg) !important;
+}
+
+.draggable.right {
+    transform: translateX(-50%) rotate(4deg) !important;
+}
+
+.moldure {
+    transition: all .1s ease-in-out;
+}
+
+.moldure .status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: 30px;
+    font-weight: bold;
+
+    text-shadow: -1px -1px 1px rgba(255, 255, 255, 0.5),
+        1px 1px 1px rgba(0, 0, 0, 0.6);
+
+    z-index: 4;
+
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+}
+
+.moldure.deny {
+    border: 30px solid var(--deny-color-50)
+}
+
+.moldure.deny .status {
+    color: var(--deny-color);
+}
+
+.moldure.allow {
+    border: 30px solid var(--allow-color-50);
+}
+
+.moldure.allow .status {
+    color: var(--allow-color);
+}
+
+.moldure.like {
+    border: 30px solid var(--super-allow-color-50);
+}
+
+.moldure.like .status {
+    color: var(--super-allow-color);
+}
+
+.meet-char .name {
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: bold;
+
+    text-shadow: -1px -1px 1px rgba(255, 255, 255, 0.5),
+        1px 1px 1px rgba(0, 0, 0, 0.6);
+    margin: 0;
+
+
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+}
+
+.meet-next {
+    height: var(--height);
+    width: var(--widht);
+
+    position: absolute;
+    top: var(--title-height);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(133, 133, 133);
+    border-radius: 4px;
+    z-index: 1;
+
+
+    background-position: center center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.meet-option {
+    height: var(--option-height);
+    width: var(--widht);
+
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #c5c5c555;
+    border-radius: 0 0 10px 10px;
+}
+
+.meet-option i {
+    font-size: 24px;
+}
+
+.quiz-title {
+    height: var(--title-height);
+    height: 6%;
+
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+}
+
+.quiz-title p {
+    font-size: 10px
+}
+
+html,
+body {
+    overflow-x: hidden;
+    font-family: 'Roboto', sans-serif;
+}
+
+.draggable,
+body,
+.meet-canva {
+    overflow: hidden;
+}
+
+
+html {
+    min-height: 100%;
+    /* make sure it is at least as tall as the viewport */
+    position: relative;
+}
+
+body {
+    height: 100%;
+    /* force the BODY element to match the height of the HTML element */
+}
+
+.cloud-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.btn-warning {
+    background-color: var(--super-allow-color) !important;
+    border-color: var(--super-allow-color-50) !important;
+}
+.btn-warning:hover {
+    border-color: var(--super-allow-color) !important;
+    background-color: var(--super-allow-color) !important;
+    opacity: 0.8 !important;
+}
+.btn-warning:active {
+    border-color: var(--super-allow-color) !important;
+    background-color: var(--super-allow-color) !important;
+    opacity: 0.8 !important;
+}
+.btn-warning:focus {
+    box-shadow: 0 0 0 0.2rem var(--super-allow-color-50) !important;
+}
+
+.btn-danger {
+    background-color: var(--allow-color) !important;
+    border-color: var(--allow-color-50) !important;
+}
+.btn-danger:hover {
+    border-color: var(--allow-color) !important;
+    background-color: var(--allow-color) !important;
+    opacity: 0.8 !important;
+}
+.btn-danger:active {
+    border-color: var(--allow-color) !important;
+    background-color: var(--allow-color) !important;
+    opacity: 0.8 !important;
+}
+.btn-danger:focus {
+    box-shadow: 0 0 0 0.2rem var(--allow-color-50) !important;
+}
+
+.btn-primary {
+    background-color: var(--deny-color) !important;
+    border-color: var(--deny-color-50) !important;
+}
+.btn-primary:hover {
+    border-color: var(--deny-color) !important;
+    background-color: var(--deny-color) !important;
+    opacity: 0.8 !important;
+}
+.btn-primary:active {
+    border-color: var(--deny-color) !important;
+    background-color: var(--deny-color) !important;
+    opacity: 0.8 !important;
+}
+.btn-primary:focus {
+    box-shadow: 0 0 0 0.2rem var(--deny-color-50) !important;
+}
