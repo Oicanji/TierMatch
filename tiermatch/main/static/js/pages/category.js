@@ -19,7 +19,7 @@ const category = {
             console.log(data);
         })
         .catch((error) => {
-            console.error(error);
+            console.error(error.json());
         });
     },
     get: function (id = false) {
@@ -42,7 +42,7 @@ const category = {
             console.log(data);
         })
         .catch((error) => {
-            console.error(error);
+            console.error(error.json());
         });
     },
 }

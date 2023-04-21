@@ -1,0 +1,30 @@
+<div class="modal fade" id="modalCadastrarCategoria" tabindex="-1" aria-labelledby="modalCadastrarCategoria"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cadastrarCategoriaLabel">Cadastrar Categoria</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="categoria">
+                <div class="row p-4">
+                    <div class="col-6">
+                        <label for="categories_name">Nome da categoria:</label>
+                        <input type="text" class="form-control" id="categories_name" name="categories_name"
+                            placeholder="Informe o nome..." />
+                    </div>
+                    <div class="col-6">
+                        <label for="categories_color">Nova cor:</label>
+                        <input type="color" class="form-control" id="categories_color">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">voltar</button>
+                <button type="button" class="btn btn-primary" onclick="category.send()">Cadastrar</button>
+            </div>
+        </div>
+    </div>
+</div>

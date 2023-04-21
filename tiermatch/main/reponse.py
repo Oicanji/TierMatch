@@ -17,7 +17,9 @@ def response(code_int, params = {}):
     method = ''
     suffix = ''
     if 'response' in params and isinstance(params['response'], dict):
+        print(params['response'])
         data = dumps(params['response'])
+        print(data)
         
     if 'method' in params:
         method = 'ao ' +params['method']+ ' '

@@ -20,5 +20,9 @@
 <button class="btn btn-primary" onclick="category.get(1);"> Pegar categoria 1 </button>
 <button class="btn btn-primary" onclick="category.get([1,2,3,4,5]);"> Pegar mais uma categoria </button>
 <button class="btn btn-primary" onclick="category.get();"> Pegar todos </button>
+<br />
+{% include 'components/modal_category.html' %}
+{% include 'components/modal_question.html' %}
+{% include 'pages/cadastrar_quiz.html' %}
 
 {% endblock %}

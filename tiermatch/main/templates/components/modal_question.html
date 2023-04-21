@@ -1,0 +1,95 @@
+
+<div class="modal fade" id="modalCadastrarQuestion" tabindex="-1" aria-labelledby="modalCadastrarQuestion" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cadastrarCategoriaLabel">Cadastrar Personagem</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="question_id" name="question_id" value="0" />
+                <div class="p-4">
+                    <div class="form-group">
+                        <label for="question_name">Nome:</label>
+                        <input type="text" class="form-control" id="question_name" name="question_name"
+                            placeholder="Informe o nome..." />
+                    </div>
+                    <div class="form-group">
+                        <label for="question_image">URL da imagem:</label>
+                        <input type="text" class="form-control" id="question_image" name="question_image"
+                            placeholder="Informe a url..." />
+                    </div>
+                    <br />
+                    <label>Preview: </label>
+                    <img src="" id="question_image_preview" class="img-fluid" style="display:none" height="100px" />
+                    <hr>
+                    <br />
+                    <label>Adicionar Atributos:</label>
+                    <br />
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="attribute_name">
+                        <select class="custom-select" id="attribute_type">
+                            <option selected>Selecione...</option>
+                            <option value="porcent">Porcentagem</option>
+                            <option value="boolean">Unitário</option>
+                        </select>
+                        <input type="text" class="form-control" id="attribute_value">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="button_attribute">+</button>
+                        </div>
+                    </div>
+                    <div class="text-center text-muted" id="explicao_burra" style="font-size:13px">
+
+                    </div>
+                    <br />
+                    <div id="use_attributes" style="display: none">
+                        <label>Só atributos usados:</label>
+                        <br />
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Tipo</th>
+                                        <th>Value</th>
+                                        <th> </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table_use_attribute">
+                                </tbody>
+                            </table>
+                            <br />
+                            <div class="text-right">
+                                <button class="btn btn-primary" id="button_reset_use_attribute">limpar todos</button>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div id="all_attributes">
+                        <label>Outros atributos cadastrados:</label>
+                        <br />
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="table_attributes">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Tipo</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table_all_attribute">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">voltar</button>
+                <button type="button" class="btn btn-primary" id="question_cadastrar">Cadastrar</button>
+            </div>
+        </div>
+    </div>
+</div>
