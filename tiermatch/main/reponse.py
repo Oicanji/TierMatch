@@ -32,11 +32,11 @@ def response(code_int, params = {}):
         'code': code_int,
         'message': res_text,
     }
-    print(data)
     if data != '':
         res['data'] = data
 
     if 'route' in params:
         res['route'] = params['route']
+
     print(res)
     return HttpResponse(dumps(res), content_type='text/plain')
