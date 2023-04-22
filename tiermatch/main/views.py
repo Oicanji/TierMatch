@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import *
 
-from .reponse import response
+from .reponse import response, format_values
 
 @login_required
 def index(request):
@@ -29,9 +29,13 @@ def play(request):
     data = json.loads(request.body)
     quiz_id = data.get('id')
     if quiz_id:
+        res = []
         quiz = Quiz.objects.filter(id=quiz_id).first()
         if quiz:
-            return render(request, 'pages/play.html', { 'quiz': quiz })
+            res.append({"name": quiz.name, "description": quiz.description, "create_by_id": quiz.create_by_id, "create_at": quiz.create_at, 
+                        "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, "deny_allias": quiz.deny_allias,
+                        "super_allow_color": quiz.super_allow_color, "allow_color": quiz.allow_color, "deny_color": quiz.deny_color})
+            return render(request, 'pages/play.html', { 'quiz': res })
         else:
             return render(request, 'pages/undefined.html', {})
     else:
@@ -40,24 +44,6 @@ def play(request):
 @login_required
 def results(request):
     return render(request, 'pages/results.html', {})
-
-@login_required
-def cadastrar_quiz(request):
-    quiz_id = request.GET.get('id')
-    args = '{}'
-    if quiz_id:
-        quiz = Quiz.objects.filter(id=quiz_id).first()
-        if quiz:
-            if quiz.user_id == request.user.id:
-                args = {"code": 200, "response": quiz}
-            else:
-                args = {"code": 403, "response": "Você não tem permissão para editar esse quiz"}
-        else:
-            args = {"code": 404, "response": "Quiz não encontrado"}
-    else:
-        args = {"code": 403, "response": "Ação inválida"}
-            
-    return args
 
 """
 ROTA / GET / QUIZ
@@ -77,7 +63,8 @@ def get_quiz(request):
             res.append({"name": quiz.name, "description": quiz.description, "create_by_id": quiz.create_by_id, "create_at": quiz.create_at, 
                     "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, "deny_allias": quiz.deny_allias, 
                         "super_allow_color": quiz.super_allow_color, "allow_color": quiz.allow_color, "deny_color": quiz.deny_color})
-            args['response'] = [quiz]
+            args['response'] = res
+            args['response'] = format_values(args)
             return response(200, args)
         else:
             return response(404, args)
@@ -101,32 +88,6 @@ def get_popular_quizzes(request):
     else:
         args['response'] = []
         return response(404, args)
-
-"""
-ROTA / GET / QUIZZES
-Quando o usuário quer buscar os quizzes dentro do banco
-Pode ser passado uma chave 'like' para buscar por nome
-Pode ser passado uma chave 'category' para buscar por categoria
-Pode ser passado uma chave 'user' para buscar por usuário
-Pode ser passado uma chave 'offset' para ser o index de onde vai começar a buscar caso contrário, vai ser 0
-Pode ser passado uma chave 'limit' para ser o limite de resultados caso contrário, vai ser 50
-Pode ser passado a ordenação dos resultados por id em ordem crescente ou decrescente apenas, por um parametro 'order_by'
-
-Por default, ele vai ordenar os resultados por ordem decrescente de id
-"""
-
-# @login_required
-# def get_quizzes(request):
-#     args = {'method': 'buscar', 'suffix': 'quiz', 'route': 'quiz/get'}
-#     if request.method != 'GET':
-#         return response(403, args)
-#     data = json.loads(request.body)
-#     for key in data:
-#         if key not in ['like', 'category', 'user', 'offset', 'limit', 'id']:
-#             return response(400, args)
-
-
-
 
 """
 ROTA / SET / QUIZ
@@ -181,7 +142,9 @@ def set_quiz(request):
                     "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, "deny_allias": quiz.deny_allias, 
                         "super_allow_color": quiz.super_allow_color, "allow_color": quiz.allow_color, "deny_color": quiz.deny_color})
     args['response'] = res
+    args['response'] = format_values(args)
     return response(200, args)
+
 
 """
 ROTA / EDIT / QUIZ
@@ -213,6 +176,7 @@ def edit_quiz(request):
                     "deny_allias": quiz.deny_allias, "super_allow_color": quiz.super_allow_color, 
                     "allow_color": quiz.allow_color, "deny_color": quiz.deny_color})
         args['response'] = res
+        args['response'] = format_values(args)
         return response(200, args)
     else:
         return response(404, args)
@@ -299,112 +263,3 @@ def remove_category(request):
     else:
         return response(400, args)
 
-"""
-ROTA / GET / QUESTIONS
-Rota de busca de questões
-É necessário passar o quiz_id que a questão pertence
-"""
-def get_question(request):
-    if request.method != 'GET':
-        return {"code": 403, "response": "Ação inválida"}
-    quiz_id = request.GET.get('quiz_id')
-    args = '{}'
-    if quiz_id:
-        questions = Question.objects.filter(quiz_id=quiz_id)
-        if questions:
-            args = {"code": 200, "response": questions}
-        else:
-            args = {"code": 404, "response": "Questões não encontradas"}
-    else:
-        args = {"code": 400, "response": "Questões não encontradas"}
-    return args
-
-"""
-ROTA / DELETE / QUESTION
-Rota de remoção de questões
-É necessário passar o id da questão
-"""
-
-
-def delete_question(request):
-    if request.method != 'POST':
-        return {"code": 403, "response": "Ação inválida"}
-    question_id = request.POST.get('id')
-    args = '{}'
-    if question_id:
-        question = Question.objects.filter(id=question_id).first()
-        quiz_original = Quiz.objects.filter(id=question.quiz_id).first()
-        if quiz_original.user_id == request.user.id:
-            question.delete()
-            args = {"code": 200, "response": "Questão removida com sucesso"}
-        else:
-            args = {"code": 403, "response": "Você não tem permissão para remover essa questão"}
-    else:
-        args = {"code": 400, "response": "Questão não encontrada"}
-
-    return args
-
-
-def set_question(request):
-    if request.method != 'POST':
-        return {"code": 403, "response": "Ação inválida"}
-    data = request.POST.get('data')
-    args = '{}'
-    if data.id:
-        quiz = Quiz.objects.filter(id=data['quiz_id']).first()
-        if quiz.user_id == request.user.id:
-            question = Question(
-                name=data['name'],
-                image=data['image'],
-                attribute=data['attribute'],
-                quiz_id=data['quiz_id'],
-            )
-            question.save()
-            args = {"code": 200, "response": question}
-        else:
-            args = {"code": 403, "response": "Você não tem permissão para adicionar questões nesse quiz"}
-    else:
-        args = {"code": 400, "response": "Quiz não encontrado"}
-    return args
-
-
-def get_answer(request):
-    if request.method != 'GET':
-        return {"code": 403, "response": "Ação inválida"}
-    question_id = request.GET.get('question_id')
-    args = '{}'
-    if question_id:
-        answers = Answer.objects.filter(question_id=question_id)
-        if answers:
-            args = {"code": 200, "response": answers}
-        else:
-            args = {"code": 404, "response": "Respostas não encontradas"}
-    else:
-        args = {"code": 400, "response": "Respostas não encontradas"}
-    return args
-
-
-def set_answer(request):
-    if request.method != 'POST':
-        return {"code": 403, "response": "Ação inválida"}
-    data = request.POST.get('data')
-    args = '{}'
-    if data:
-        if data['answers'] and data['answer']:
-            quiz = Quiz.objects.filter(id=data['answer']).first()
-            if quiz:
-                respost = Answers(id_user=request.user.id, id_quiz=quiz.id)
-                respost.save()
-                for answer in data['answers']:
-                    answer = Answer(
-                        id_question=answer['id_question'],                        
-                        id_answer=answer['id_answer'],
-                        value=answer['value'],
-                    )
-                    answer.save()
-                args = {"code": 200, "response": "Respostas salvas com sucesso"}
-            else:
-                args = {"code": 404, "response": "Quiz não encontrado"}
-        else:
-            args = {"code": 400, "response": "Respostas não encontradas"}
-    return args

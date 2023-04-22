@@ -40,3 +40,19 @@ def response(code_int, params = {}):
 
     print(res)
     return HttpResponse(dumps(res), content_type='text/plain')
+
+def format_values(args):
+    params = {}
+    for i in args['response']:
+        params["name"] = i['name']
+        params["description"] = i['description']
+        params["create_id"] = i['create_by_id'].id
+        params["create_name"] = i['create_by_id'].username
+        params["create_at"] = i['create_at'].strftime("%d/%m/%Y %H:%M:%S")
+        params["super_allow_allias"] = i['super_allow_allias']
+        params["allow_allias"] = i['allow_allias']
+        params["deny_allias"] = i['deny_allias']
+        params["super_allow_color"] = i['super_allow_color']
+        params["allow_color"] = i['allow_color']
+        params["deny_color"] = i['deny_color']
+    return params
