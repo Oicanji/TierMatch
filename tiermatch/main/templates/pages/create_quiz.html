@@ -1,14 +1,11 @@
+{% extends 'main/base.html' %}
 
-{% include 'components/modal_category.html' %}
-{% include 'components/modal_question.html' %}
+{% block title %}Criar quiz{% endblock %}
 
+{% block content %}
+
+{% include 'components/navbar.html' %}
 {% csrf_token %}
-
-{% load static %}
-<script src="{% static 'js/pages/category.js' %}"></script>
-<script src="{% static 'js/pages/question.js' %}"></script>
-<script src="{% static 'js/pages/quiz_page.js' %}"></script>
-<script src="{% static 'js/pages/attributes.js' %}"></script>
 
 <div class="container">
     <div class="p-5">
@@ -110,3 +107,13 @@
         </div>
     </div>
 </div>
+
+{% load static %}
+
+{% include 'components/modal_category.html' %}
+{% include 'components/modal_question.html' %}
+<script src="{% static 'js/pages/category.js' %}"></script>
+<script src="{% static 'js/pages/question.js' %}"></script>
+<script src="{% static 'js/pages/quiz_page.js' %}"></script>
+<script src="{% static 'js/pages/attributes.js' %}"></script>
+{% endblock %}
