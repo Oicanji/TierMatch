@@ -175,16 +175,25 @@ def edit_quiz(request):
 """
 ROTA / REMOVE / QUIZ
 Rota de remoção do quiz
-Apenas o usuário que criou o quiz pode remover
+Apenas o usuário que criou o quiz pode remove-lo
 """
 
-
-
-
-
-
-
-
+def remove_quiz(request):
+    args = {'method': 'remover', 'suffix': 'quiz', 'route': 'quiz/remove'}
+    if request.method != 'POST':
+        return response(403, args)
+    data = json.loads(request.body)
+    if not data:
+        return response(400, args)
+    quiz = Quiz.objects.filter(id=data.get('id')).first()
+    if not quiz:
+        return response(404, args) 
+    current_user = request.user.id
+    if current_user != quiz.create_by_id:
+        return response(403, args)
+    quiz.delete()
+    return response(200, args)
+    
 """
 create a routes get, set and remove for category 
 """
