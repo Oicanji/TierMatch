@@ -5,15 +5,6 @@
 {% block content %}
 
 {% include 'components/navbar.html' %}
-
-{% load static %}
-<script src="{% static 'js/pages/category.js' %}"></script>
-<script src="{% static 'js/pages/question.js' %}"></script>
-<script src="{% static 'js/pages/quiz_page.js' %}"></script>
-<script src="{% static 'js/pages/attributes.js' %}"></script>
-
-{% csrf_token %}
-
 <h1 class="text-center">Home</h1>
 
 <script>
@@ -22,8 +13,5 @@
 <button class="btn btn-primary" onclick="category.get([7,8,9]);"> Pegar mais uma categoria </button>
 <button class="btn btn-primary" onclick="category.get();"> Pegar todos </button>
 <br />
-{% include 'components/modal_category.html' %}
-{% include 'components/modal_question.html' %}
-{% include 'pages/cadastrar_quiz.html' %}
 
 {% endblock %}

@@ -1,3 +1,4 @@
+from collections import Counter
 import json
 from django.shortcuts import render
 from datetime import datetime
@@ -11,6 +12,34 @@ from .reponse import response
 @login_required
 def index(request):
     return render(request, 'pages/home.html', {})
+
+def undefined(request):
+    return render(request, 'pages/undefined.html', {})
+
+@login_required
+def my_quizzes(request):
+    return render(request, 'pages/my_quizzes.html', {})
+
+@login_required
+def create_quiz(request):
+    return render(request, 'pages/create_quiz.html', {})
+
+@login_required
+def play(request):
+    data = json.loads(request.body)
+    quiz_id = data.get('id')
+    if quiz_id:
+        quiz = Quiz.objects.filter(id=quiz_id).first()
+        if quiz:
+            return render(request, 'pages/play.html', { 'quiz': quiz })
+        else:
+            return render(request, 'pages/undefined.html', {})
+    else:
+        return render(request, 'pages/undefined.html', {})
+
+@login_required
+def results(request):
+    return render(request, 'pages/results.html', {})
 
 @login_required
 def cadastrar_quiz(request):
@@ -29,14 +58,6 @@ def cadastrar_quiz(request):
         args = {"code": 403, "response": "Ação inválida"}
             
     return args
-
-
-
-"""
-ROTA / PLAY
-Rota que o usuário vai acessar para jogar o quiz
-Tem que ser enviado o id do quiz caso contrário, envie para o acesso proibido
-"""
 
 """
 ROTA / GET / QUIZ
@@ -65,7 +86,7 @@ def get_popular_quizzes(request):
     args = {'method': 'buscar', 'suffix': 'quiz', 'route': 'quizzes/popular'}
     if request.method != 'GET':
         return response(403, args)
-    most_answers = Answer.objects.values('quiz_id').annotate(total=Count('quiz_id')).order_by('-total')
+    most_answers = Answer.objects.values('quiz_id').annotate(total=Counter('quiz_id')).order_by('-total')
     quizzes_with_most_answers = []
     for answer in most_answers:
         quiz = Quiz.objects.filter(id=answer['quiz_id']).first()

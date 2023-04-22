@@ -1,3 +1,15 @@
+
+{% include 'components/modal_category.html' %}
+{% include 'components/modal_question.html' %}
+
+{% csrf_token %}
+
+{% load static %}
+<script src="{% static 'js/pages/category.js' %}"></script>
+<script src="{% static 'js/pages/question.js' %}"></script>
+<script src="{% static 'js/pages/quiz_page.js' %}"></script>
+<script src="{% static 'js/pages/attributes.js' %}"></script>
+
 <div class="container">
     <div class="p-5">
         <h3 align="center" id="title-quiz">Cadastrar um Novo Quiz</h3>
