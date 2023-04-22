@@ -1,11 +1,13 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+
 # Create your models here.
 class Quiz(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=20000)
-    create_by = models.ForeignKey('User', on_delete=models.CASCADE)
+    create_by = models.ForeignKey(User, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
     allow_allias = models.CharField(max_length=100)
     super_allow_allias = models.CharField(max_length=100)
@@ -36,7 +38,7 @@ class Category(models.Model):
 
 class Answers(models.Model):
     id = models.AutoField(primary_key=True)
-    id_user = models.ForeignKey('User', on_delete=models.CASCADE)
+    id_user = models.ForeignKey(User, on_delete=models.CASCADE)
     id_quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE)
     list_answers = models.ManyToManyField('Question', through='Answer')
 
@@ -45,10 +47,3 @@ class Answer(models.Model):
     id_answer = models.ForeignKey('Answers', on_delete=models.CASCADE)
     id_question = models.ForeignKey('Question', on_delete=models.CASCADE)
     id_category = models.ForeignKey('Category', on_delete=models.CASCADE)
-
-class User(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    email = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
-    create_at = models.DateTimeField(auto_now_add=True)

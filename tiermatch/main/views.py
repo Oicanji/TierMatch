@@ -111,8 +111,11 @@ def set_quiz(request):
     if request.method != 'POST':
         return response(403, args)
     current_user = request.user.id
+    print(current_user)
     data = json.loads(request.body)
     if not data:
+        return response(400, args)
+    if not data.get('name') or not data.get('description') or not data.get('super_allow_allias') or not data.get('allow_allias') or not data.get('deny_allias') or not data.get('super_allow_color') or not data.get('allow_color') or not data.get('deny_color'):
         return response(400, args)
     params = {
         "name": data.get('name'),
@@ -126,8 +129,6 @@ def set_quiz(request):
         "allow_color": data.get('allow_color'),
         "deny_color": data.get('deny_color'),
     }
-    if not all(params):
-        return response(400, args)
     quiz = Quiz(name=params.get('name'), description=params.get('description'), create_by_id=params.get('create_by_id'), create_at=params.get('create_at'),
                 super_allow_allias=params.get('super_allow_allias'), allow_allias=params.get('allow_allias'), deny_allias=params.get('deny_allias'),
                 super_allow_color=params.get('super_allow_color'), allow_color=params.get('allow_color'), deny_color=params.get('deny_color'))
