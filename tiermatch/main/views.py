@@ -110,14 +110,14 @@ def set_quiz(request):
     args = {'method': 'criar', 'suffix': 'quiz', 'route': 'quiz/set'}
     if request.method != 'POST':
         return response(403, args)
-    current_user = request.user
+    current_user = request.user.id
     data = json.loads(request.body)
     if not data:
         return response(400, args)
     params = {
         "name": data.get('name'),
         "description": data.get('description'),   
-        "create_by_id":  current_user.id,
+        "create_by_id":  current_user,
         "create_at": datetime.now(),
         "super_allow_allias": data.get('super_allow_allias'),
         "allow_allias": data.get('allow_allias'),
@@ -170,6 +170,19 @@ def edit_quiz(request):
         return response(200, args)
     else:
         return response(404, args)
+
+
+"""
+ROTA / REMOVE / QUIZ
+Rota de remoção do quiz
+Apenas o usuário que criou o quiz pode remover
+"""
+
+
+
+
+
+
 
 
 """
