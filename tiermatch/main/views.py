@@ -166,13 +166,9 @@ def set_quiz(request):
     if request.method != 'POST':
         return response(403, args)
     current_user = request.user.id
-    print(current_user)
     data = json.loads(request.body)
     if not data:
         return response(400, args)
-    for i in data:
-        if i not in ['name', 'description', 'super_allow_allias', 'allow_allias', 'deny_allias', 'super_allow_color', 'allow_color', 'deny_color']:
-            return response(400, args)
     res = []
     params = {
         "name": data.get('name'),
@@ -192,9 +188,24 @@ def set_quiz(request):
 
     quiz.save()
     quiz = Quiz.objects.filter(id=quiz.id).first()
-    res.append({"name": quiz.name, "description": quiz.description, "create_by_id": quiz.create_by, "create_at": quiz.create_at, 
-                    "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, "deny_allias": quiz.deny_allias, 
-                        "super_allow_color": quiz.super_allow_color, "allow_color": quiz.allow_color, "deny_color": quiz.deny_color})
+
+    list_categories = data.get('categories')
+    list_categories_saves = []
+    if list_categories is not None and len(list_categories) > 0:
+        for category in list_categories:
+            category_exists = Category.objects.filter(id=category).first()
+            if category_exists:
+                category = Categories(quiz_id=quiz.id, categories_id=category_exists.id)
+                category.save()
+                list_categories_saves.append({"id": category.id, "quiz_id": category.quiz_id, "categories_id": category.categories_id})
+
+    res.append({"name": quiz.name, "description": quiz.description, 
+                "create_by_id": quiz.create_by, "create_at": quiz.create_at, 
+                "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, 
+                "deny_allias": quiz.deny_allias, "super_allow_color": quiz.super_allow_color, 
+                "allow_color": quiz.allow_color, "deny_color": quiz.deny_color,
+                "categories": list_categories_saves})
+    
     print()
     args['response'] = res
     args['response'] = format_values(args)
