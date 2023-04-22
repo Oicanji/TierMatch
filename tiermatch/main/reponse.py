@@ -45,6 +45,7 @@ def format_values(args):
     params = {}
     print(args['response'])
     for i in args['response']:
+        params["id"] = i['id']
         params["name"] = i['name']
         params["description"] = i['description']
         params["create_id"] = i['create_by_id'].id

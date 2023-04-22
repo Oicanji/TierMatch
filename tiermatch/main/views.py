@@ -210,6 +210,7 @@ def set_quiz(request):
                 list_categories_saves.append({"quiz_id": category.quiz_id.id, "categories_id": category.categories_id.id})
 
     res.append({
+        "id": quiz.id,
         "name": quiz.name, "description": quiz.description, 
         "create_by_id": quiz.create_by, "create_at": quiz.create_at, 
         "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, 
