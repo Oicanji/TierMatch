@@ -60,7 +60,23 @@ def get_quiz(request):
     else:
         return response(400, args)
 
-
+@login_required
+def get_popular_quizzes(request):
+    args = {'method': 'buscar', 'suffix': 'quiz', 'route': 'quizzes/popular'}
+    if request.method != 'GET':
+        return response(403, args)
+    most_answers = Answer.objects.values('quiz_id').annotate(total=Count('quiz_id')).order_by('-total')
+    quizzes_with_most_answers = []
+    for answer in most_answers:
+        quiz = Quiz.objects.filter(id=answer['quiz_id']).first()
+        if quiz:
+            quizzes_with_most_answers.append(quiz)
+    if quizzes_with_most_answers:
+        args['response'] = quizzes_with_most_answers
+        return response(200, args)
+    else:
+        args['response'] = []
+        return response(404, args)
 
 """
 ROTA / GET / QUIZZES

@@ -18,7 +18,7 @@ const category = {
         .then(data => {
             //refresh
             category.build();
-            console.log(data);
+            $('#modalCadastrarCategoria').modal('hide');
         })
         .catch((error) => {
             console.error(error.json());
