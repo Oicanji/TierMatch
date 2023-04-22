@@ -177,6 +177,7 @@ $('#botao_cadastar_editar').on('click', function () {
         quiz.submit();
     }else{
         //edit
+        console.log('edit');
         quiz.quiz_edit(quiz_atual);
     }
 });

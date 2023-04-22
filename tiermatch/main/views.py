@@ -219,7 +219,6 @@ def set_quiz(request):
         "categories": list_categories_saves
     })
     
-    print()
     args['response'] = res
     args['response'] = format_values(args)
     return response(200, args)
@@ -244,16 +243,28 @@ def edit_quiz(request):
     res = []
     if quiz:
         for key in data:
-            if key not in ['name', 'description', 'super_allow_allias', 'allow_allias', 'deny_allias', 'super_allow_color', 'allow_color', 'deny_color']:
+            if key not in ['id', 'name', 'description', 'super_allow_allias', 'allow_allias', 'deny_allias', 'super_allow_color', 'allow_color', 'deny_color', 'categories']:
                 return response(400, args)
-        for key in data:
-            if key in ['name', 'description', 'super_allow_allias', 'allow_allias', 'deny_allias', 'super_allow_color', 'allow_color', 'deny_color']:
-                setattr(quiz, key, data.get(key))
         quiz.save()
-        quiz = Quiz.objects.filter(id=quiz.id).first()
-        res.append({"name": quiz.name, "description": quiz.description, "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, 
-                    "deny_allias": quiz.deny_allias, "super_allow_color": quiz.super_allow_color, 
-                    "allow_color": quiz.allow_color, "deny_color": quiz.deny_color})
+        list_categories = data.get('categories')
+        list_categories_saves = []
+        if list_categories is not None and len(list_categories) > 0:
+            for category in list_categories:
+                category_exists = Category.objects.filter(id=category).first()
+                if category_exists:
+                    category = Categories(quiz_id=quiz, categories_id=category_exists)
+                    category.save()
+                    list_categories_saves.append({"quiz_id": category.quiz_id.id, "categories_id": category.categories_id.id})
+        res.append({
+            "id": quiz.id,
+            "name": quiz.name, "description": quiz.description, 
+            "create_by_id": quiz.create_by, "create_at": quiz.create_at, 
+            "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, 
+            "deny_allias": quiz.deny_allias, "super_allow_color": quiz.super_allow_color, 
+            "allow_color": quiz.allow_color, "deny_color": quiz.deny_color,
+            "categories": list_categories_saves
+        }) 
+                
         args['response'] = res
         args['response'] = format_values(args)
         return response(200, args)
