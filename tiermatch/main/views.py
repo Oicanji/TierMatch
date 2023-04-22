@@ -263,3 +263,81 @@ def remove_category(request):
     else:
         return response(400, args)
 
+
+
+@login_required
+def create_question(request):
+    args = {'method': 'criar', 'suffix': 'pergunta', 'route': 'question/create'}
+    if request.method != 'POST':
+        return response(403, args)
+    data = json.loads(request.body)
+    name = data.get('name')
+    description = data.get('description')
+    image = data.get('image')
+    attribute = data.get('attribute')
+    quiz_id = data.get('quiz_id')
+    if name and description and image and attribute and quiz_id:
+        question = Question(name=name, description=description, image=image, attribute=attribute, quiz_id=quiz_id)
+        question.save()
+        return response(200, args)
+    else:
+        return response(400, args)
+
+
+@login_required
+def get_question(request):
+    args = {'method': 'buscar', 'suffix': 'pergunta', 'route': 'question/get'}
+    data = {}
+    if request.method != 'GET':
+        return response(403, args)
+    data = json.loads(request.body)
+    res = []
+    if data.get('quiz_id'):
+        quiz_id = data.get('quiz_id')
+        questions = Question.objects.filter(quiz_id=quiz_id)
+        for question in questions:
+            res.append({"name": question.name, "description": question.description, "image": question.image, "attribute": question.attribute, "quiz_id": question.quiz_id})
+    else:
+        return response(400, args)
+
+
+@login_required
+def edit_question(request):
+    args = {'method': 'editar', 'suffix': 'pergunta', 'route': 'question/edit'}
+    if request.method != 'POST':
+        return response(403, args)
+    data = json.loads(request.body)
+    if not data:
+        return response(400, args)
+    question = Question.objects.filter(id=data.get('id')).first()
+    res = []
+    if question:
+        for key in data:
+            if key not in ['name', 'description', 'image', 'attribute', 'quiz_id']:
+                return response(400, args)
+        for key in data:
+            if key in ['name', 'description', 'image', 'attribute', 'quiz_id']:
+                setattr(question, key, data.get(key))
+        question.save()
+        question = Question.objects.filter(id=question.id).first()
+        res.append({"name": question.name, "description": question.description, "image": question.image, "attribute": question.attribute, "quiz_id": question.quiz_id})
+        args['response'] = res
+        args['response'] = format_values(args)
+        return response(200, args)
+    else:
+        return response(404, args)
+
+
+@login_required
+def remove_question(request):
+    args = {'method': 'remover', 'suffix': 'pergunta', 'route': 'question/remove'}
+    if request.method != 'POST':
+        return response(403, args)
+    data = json.loads(request.body)
+    if not data:
+        return response(400, args)
+    question = Question.objects.filter(id=data.get('id')).first()
+    if not question:
+        return response(404, args)
+    question.delete()
+    return response(200, args)
