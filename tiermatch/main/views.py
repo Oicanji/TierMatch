@@ -133,6 +133,7 @@ def set_quiz(request):
         return response(400, args)
     if not data.get('name') or not data.get('description') or not data.get('super_allow_allias') or not data.get('allow_allias') or not data.get('deny_allias') or not data.get('super_allow_color') or not data.get('allow_color') or not data.get('deny_color'):
         return response(400, args)
+    res = []
     params = {
         "name": data.get('name'),
         "description": data.get('description'),   
@@ -151,7 +152,10 @@ def set_quiz(request):
 
     quiz.save()
     quiz = Quiz.objects.filter(id=quiz.id).first()
-    args['response'] = quiz
+    res.append({"name": quiz.name, "description": quiz.description, "create_by_id": quiz.create_by_id, "create_at": quiz.create_at, 
+                    "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, "deny_allias": quiz.deny_allias, 
+                        "super_allow_color": quiz.super_allow_color, "allow_color": quiz.allow_color, "deny_color": quiz.deny_color})
+    args['response'] = res
     return response(200, args)
 
 """
