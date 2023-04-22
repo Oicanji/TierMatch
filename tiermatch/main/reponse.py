@@ -55,4 +55,5 @@ def format_values(args):
         params["super_allow_color"] = i['super_allow_color']
         params["allow_color"] = i['allow_color']
         params["deny_color"] = i['deny_color']
-    return params
+        params["categories"] = i["categories"]  
+        return params

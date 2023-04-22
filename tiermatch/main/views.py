@@ -114,9 +114,18 @@ def get_quiz(request):
     if data.get('id'):
         quiz = Quiz.objects.filter(id=data.get('id')).first()
         if quiz:
+            list_categories = data.get('categories')
+            list_categories_saves = []
+            if list_categories is not None and len(list_categories) > 0:
+                for category in list_categories:
+                    category_exists = Category.objects.filter(id=category).first()
+                    if category_exists:
+                        category = Categories(quiz_id=quiz, categories_id=category_exists)
+                        list_categories_saves.append({"id": category.id, "quiz_id": category.quiz_id, "categories_id": category.categories_id})                        
             res.append({"name": quiz.name, "description": quiz.description, "create_by_id": quiz.create_by_id, "create_at": quiz.create_at, 
-                    "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, "deny_allias": quiz.deny_allias, 
-                        "super_allow_color": quiz.super_allow_color, "allow_color": quiz.allow_color, "deny_color": quiz.deny_color})
+                            "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, "deny_allias": quiz.deny_allias, 
+                                "super_allow_color": quiz.super_allow_color, "allow_color": quiz.allow_color, 
+                                    "deny_color": quiz.deny_color, "categories": list_categories_saves})
             args['response'] = res
             args['response'] = format_values(args)
             return response(200, args)
