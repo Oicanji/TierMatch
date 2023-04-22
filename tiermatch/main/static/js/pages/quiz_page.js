@@ -66,10 +66,30 @@ quiz = {
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
             success: function (response) {
-                console.log(response);
+                if (response.code == 200) {
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        icon: 'success',
+                        title: response.message,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+                    quiz.pos_create(response.data.json());
+                }
             }, error: function (error) {
                 console.log(error);
             }
         });
+    },
+    pos_create: function (data) {
+        attributes.quiz_init();
+        listQuestions = data.questions ? data.questions : [];
+        quiz.init('edit');
     }
 }

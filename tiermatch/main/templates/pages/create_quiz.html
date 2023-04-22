@@ -40,7 +40,7 @@
 
             <div class="d-flex mt-3 mb-3" id="question_not_allow">
                 <hr style="width:30%;">
-                <div class="text-center mt-1 font-italic text-muted" style="width:20%">cadastre primeiro o quiz</div>
+                <div class="text-center mt-1 font-italic text-muted" style="width:20%">Para cadastrar perguntas no quiz. Cadastre primeiro o quiz.</div>
                 <hr style="width:30%">
             </div>
 
@@ -100,6 +100,17 @@
                 <button class="btn btn-secondary btn-block col-12" id="avancadas_button">mostrar opções
                     avançadas</button>
             </div>
+            <script>
+                $('#avancadas_button').on('click', function () {
+                    if ($('#avancadas').css('display') == 'none') {
+                        $('#avancadas').slideDown();
+                        $('#avancadas_button').text('esconder opções avançadas');
+                    } else {
+                        $('#avancadas').slideUp();
+                        $('#avancadas_button').text('mostrar opções avançadas');
+                    }
+                });
+            </script>
         </div>
         <br />
         <div class="text-center">

@@ -43,6 +43,7 @@ def response(code_int, params = {}):
 
 def format_values(args):
     params = {}
+    print(args['response'])
     for i in args['response']:
         params["name"] = i['name']
         params["description"] = i['description']
