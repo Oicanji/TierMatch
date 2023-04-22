@@ -33,14 +33,13 @@ quiz = {
         //categorias = $('.categoria_canva .categoria_div');
         categorias = document.querySelectorAll('.categoria_canva .categoria_div');
         categorias_list = [];
-        for (const categoria of categorias) {
-            if (categoria.classList.contains('active')) {
-                va = categoria.attributes.value;
-                categorias_list.push(va.value);
-            }
-        }
-        console.log(categorias_list);
         if (params == false) {
+            for (const categoria of categorias) {
+                if (categoria.classList.contains('active')) {
+                    va = categoria.attributes.value;
+                    categorias_list.push(va.value);
+                }
+            }
             data = {
                 name: $('#name').val(),
                 description: $('#description').val(),
