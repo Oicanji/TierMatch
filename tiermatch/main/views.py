@@ -74,7 +74,10 @@ def get_quiz(request):
     if data.get('id'):
         quiz = Quiz.objects.filter(id=data.get('id')).first()
         if quiz:
-            args['response'] = [quiz]
+            res.append({"name": quiz.name, "description": quiz.description, "create_by_id": quiz.create_by_id, "create_at": quiz.create_at, 
+                    "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, "deny_allias": quiz.deny_allias, 
+                        "super_allow_color": quiz.super_allow_color, "allow_color": quiz.allow_color, "deny_color": quiz.deny_color})
+            args['response'] = [res]
             return response(200, args)
         else:
             return response(404, args)
