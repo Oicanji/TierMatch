@@ -195,7 +195,8 @@ def set_quiz(request):
         for category in list_categories:
             category_exists = Category.objects.filter(id=category).first()
             if category_exists:
-                category = Categories(quiz_id=quiz.id, categories_id=category_exists.id)
+                print(quiz.id, category_exists.id)
+                category = Categories(quiz_id=quiz, categories_id=category_exists)
                 category.save()
                 list_categories_saves.append({"id": category.id, "quiz_id": category.quiz_id, "categories_id": category.categories_id})
 
