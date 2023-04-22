@@ -30,6 +30,16 @@ quiz = {
         category.init(type);
     },
     submit: function (params = false) {
+        //categorias = $('.categoria_canva .categoria_div');
+        categorias = document.querySelectorAll('.categoria_canva .categoria_div');
+        categorias_list = [];
+        for (const categoria of categorias) {
+            if (categoria.classList.contains('active')) {
+                va = categoria.attributes.value;
+                categorias_list.push(va.value);
+            }
+        }
+        console.log(categorias_list);
         if (params == false) {
             data = {
                 name: $('#name').val(),
@@ -40,6 +50,7 @@ quiz = {
                 allow_color: $('#allow_color').val(),
                 deny_allias: $('#deny_alias').val(),
                 deny_color: $('#deny_color').val(),
+                categories: categorias_list,
             }
         }else{
             data = params;
@@ -61,6 +72,5 @@ quiz = {
                 console.log(error);
             }
         });
-        
     }
 }

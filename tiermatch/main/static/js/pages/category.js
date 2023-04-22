@@ -98,7 +98,7 @@ const category = {
 
             $('#categoria_list').append(
                 `<div class="p-1 categoria_canva" id="categoria_div_${item.id}">
-                    <span class="badge badge-primary categoria_div" style="background-color: ${item.color};">
+                    <span class="badge badge-primary categoria_div" style="background-color: ${item.color};"  value="${item.id}">
                         ${item.name}
                         <button type="button" class="close add" onclick="category.active(${item.id})">
                             <span aria-hidden="true">+</span>
