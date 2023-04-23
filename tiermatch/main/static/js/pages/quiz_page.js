@@ -1,10 +1,11 @@
 quiz_atual = ($('#edit_url').val() != '') ? JSON.parse($('#edit_url').val()) : null;
-console.log(quiz_atual);
 listQuestions = [];
 
 $(document).ready(function () {
     if (quiz_atual != null) {
-        listQuestions = quiz_atual.questions;
+        listQuestions = (quiz_atual.questions) ? quiz_atual.questions : [];
+        quiz.init('edit');
+        category.init('edit');
     }else{
         attributes.quiz_init();
     }
@@ -34,6 +35,7 @@ quiz = {
         $('#botao_cadastar_editar').html('Editar');
     },
     get_categories_active: function () {
+        categorias = document.querySelectorAll('.categoria_canva .categoria_div');
         for (const categoria of categorias) {
             if (categoria.classList.contains('active')) {
                 va = categoria.attributes.value;
@@ -44,7 +46,6 @@ quiz = {
     },
     submit: function (params = false) {
         //categorias = $('.categoria_canva .categoria_div');
-        categorias = document.querySelectorAll('.categoria_canva .categoria_div');
         categorias_list = [];
         if (params == false) {
             categorias_list = quiz.get_categories_active();

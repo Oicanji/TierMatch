@@ -12,23 +12,37 @@ const question = {
     add: function () {
         var name = $('#question_name').val();
         var image = $('#question_image').val();
-        var attributes = attributes.list_use;
+        var attribute = attributes.list_use;
         var quiz_id = quiz_atual.id;
 
         data = {
             name,
             image,
-            attributes,
+            attribute,
             quiz_id
         }
         data = JSON.stringify(data);
         $.ajax({
-            url: '/question/set/',
+            url: '/question/create/',
             method: 'POST',
             data: data,
             dataType: 'json',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
             success: function (response) {
-                question.add_question({name, image, id: response.id});
+                if (response.code != 200) {
+                    question.add_question({name, image, id: response.id});
+                    $('#modalCadastrarQuestion').modal('hide');
+                } else {
+                    Swal.fire({
+                        title: 'Erro ao cadastrar!',
+                        text: response.message,
+                        icon: 'danger',
+                        confirmButtonText: 'Ok'
+                    });
+                }
             }, error: function (error) {
                 Swal.fire({
                     title: 'Erro ao cadastrar!',
@@ -171,5 +185,5 @@ $('#question_cadastrar').on('click', function () {
 
 $('#question_image').on('change', function () {
     $('#question_image_preview').attr('src', $(this).val());
-    $('#question_image_preview').slideToggle();
+    $('#question_image_preview').show();
 });

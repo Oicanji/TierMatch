@@ -1,4 +1,10 @@
 const category = {
+    in_edit_mode: false,
+    init: function (type) {
+        if (type == 'edit') {
+            category.in_edit_mode = true;
+        }
+    },
     send: function (data = false) {
         if (!data) {
             data = {
@@ -92,7 +98,7 @@ const category = {
         }
     },
     build: async function () {
-        const response = await category.get([], category.draw);
+        await category.get([], category.draw);
     },
     draw: function (response) {
         $('#categoria_list').html('');
@@ -116,6 +122,14 @@ const category = {
                         </button>
                     </span>
                 </div>`);
+        }
+        category.draw_edit();
+    },
+    draw_edit: function () {
+        if (category.in_edit_mode) {
+            for ( const cat of quiz_atual.categories) {
+                category.active(cat);
+            }
         }
     }
 }

@@ -45,10 +45,10 @@ def create_quiz(request, quiz_id=None):
                 list_categories_saves.append(category.categories_id.id)
 
             res['categories'] = list_categories_saves
-            json = json.dumps(res)
+            a = json.dumps(res)
          
             context = {
-                "res": json,
+                "res": a,
             }
             return render(request, 'pages/create_quiz.html', context)
             
@@ -152,12 +152,14 @@ def get_quiz(request):
                     if category_exists:
                         category = Categories(quiz_id=quiz, categories_id=category_exists)
                         list_categories_saves.append({"quiz_id": category.quiz_id.id, "categories_id": category.categories_id.id})
+            res = []
             res.append({"name": quiz.name, "description": quiz.description, "create_by_id": quiz.create_by_id, "create_at": quiz.create_at, 
                             "super_allow_allias": quiz.super_allow_allias, "allow_allias": quiz.allow_allias, "deny_allias": quiz.deny_allias, 
                                 "super_allow_color": quiz.super_allow_color, "allow_color": quiz.allow_color, 
                                     "deny_color": quiz.deny_color, "categories": list_categories_saves})
             args['response'] = res
             args['response'] = format_values(args)
+            print(args)
             return response(200, args)
         else:
             return response(404, args)
@@ -181,23 +183,6 @@ def get_popular_quizzes(request):
     else:
         args['response'] = []
         return response(404, args)
-
-"""
-ROTA / SET / QUIZ
-Rota de criação do quiz
-Tem que ser passados os seguintes parametros:
-name = nome do quiz
-description = descrição do quiz
-create_by = id do usuário que está criando o quiz
-
-super_allow_allias = alias do super_allow
-allow_allias = alias do allow
-deny_allias = alias do deny
-
-super_allow_color = cor do super_allow
-allow_color = cor do allow
-deny_color = cor do deny
-"""
 
 @login_required
 def set_quiz(request):
@@ -406,12 +391,14 @@ def create_question(request):
         return response(403, args)
     data = json.loads(request.body)
     name = data.get('name')
-    description = data.get('description')
     image = data.get('image')
     attribute = data.get('attribute')
     quiz_id = data.get('quiz_id')
-    if name and description and image and attribute and quiz_id:
-        question = Question(name=name, description=description, image=image, attribute=attribute, quiz_id=quiz_id)
+    quiz = Quiz.objects.filter(id=quiz_id).first()
+    if quiz.create_by_id != request.user.id:
+        return response(403, args)
+    if name and image and attribute and quiz_id:
+        question = Question(name=name, image=image, attribute=attribute, quiz_id=quiz)
         question.save()
         return response(200, args)
     else:
