@@ -98,7 +98,8 @@ def create_quiz(request, quiz_id=None):
 
 @login_required
 def play(request):
-    return render(request, 'pages/play.html', {})
+    return render(request, 'pages/play.html', res)
+    # print('aqui')
     # if request.method != 'GET':
     #     return render(request, "pages/undefined.html")
     # data = json.loads(request.body)
@@ -368,6 +369,7 @@ def create_category(request):
     data = json.loads(request.body)
     name = data.get('name')
     color = data.get('color')
+    print(name)
     if name and color:
         category = Category(name=name, color=color)
         category.save()

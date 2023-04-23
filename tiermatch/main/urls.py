@@ -5,7 +5,7 @@ urlpatterns = [
     path('', views.index, name='home'),
     path('quiz/', views.create_quiz, name='quiz'),
     path('quiz/<int:quiz_id>/', views.create_quiz, name='quiz'),
-    path('play/', views.play, name='play'),
+    path('play/<int:quiz_id>', views.play, name='play'),
     path('myquizzes/', views.my_quizzes, name='my_quizzes'),
     
     path('category/create/', views.create_category, name='create_category'),
