@@ -5,14 +5,20 @@
 {% block content %}
 {% include 'components/navbar.html' %}
 
-<h1 class="text-center">Home</h1>
+{% if res %}
+<input type="hidden" id="edit_url" value='{{ res|default:"null"|safe }}'></input>
+{% else %}
+<input type="hidden" id="edit_url" value='null'></input>
+{% endif %}
 
-<script>
-</script>
-<button class="btn btn-primary" onclick="category.send({name: 'Teste', color: 'FF0000'});"> testar  envio de attribute </button>
-<button class="btn btn-primary" onclick="category.get([7,8,9]);"> Pegar mais uma categoria </button>
-<button class="btn btn-primary" onclick="category.get();"> Pegar todos </button>
 <br />
+<div class="container">
+    <div class="row" id="todos_os_quizzes">
+        <div class="col-md-12">
+            <h1 class="text-center">Bem vindo ao TierMatch!</h1>
+        </div>
+    </div>
+</div>
 
 {% include 'components/ad.html' %}
 {% endblock %}

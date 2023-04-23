@@ -36,6 +36,7 @@ quiz = {
     },
     get_categories_active: function () {
         categorias = document.querySelectorAll('.categoria_canva .categoria_div');
+        categorias_list = [];
         for (const categoria of categorias) {
             if (categoria.classList.contains('active')) {
                 va = categoria.attributes.value;
@@ -173,14 +174,16 @@ quiz = {
 }
 
 $('#botao_cadastar_editar').on('click', function () {
+    $('#botao_cadastar_editar').attr('disabled', true);
     event.preventDefault();
-    console.log(quiz_atual);
     if (quiz_atual == null) {
         //submit
         quiz.submit();
     }else{
         //edit
-        console.log('edit');
         quiz.quiz_edit(quiz_atual);
     }
+    setTimeout(() => {
+        $('#botao_cadastar_editar').attr('disabled', false);
+    }, 1000);
 });

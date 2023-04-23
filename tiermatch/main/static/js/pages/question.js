@@ -32,9 +32,10 @@ const question = {
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
             success: function (response) {
-                console.log(response);
                 if (response.code == 200) {
-                    question.add_question({name, image, id: response.id});
+                    data = JSON.parse(response.data);
+                    console.log(data);
+                    question.add_question({name: data.name, image: data.image, id: data.id});
                     $('#modalCadastrarQuestion').modal('hide');
                 } else {
                     Swal.fire({
@@ -95,44 +96,19 @@ const question = {
         $('#modalCadastrarQuestion').modal('show');
     },
     add_question: function (question_new) {
-        const $listItem = document.createElement("div");
-        $listItem.classList.add('col-md-4 col-sm-6 text-center position-relative question-div');
+        console.log(question_new);
+        const $listItem = `
+            <div class="col-md-4 col-sm-6 text-center position-relative question-div" id="${question_new.id}" onClick="openQuestion(this)">
+                <p class="text-muted">${question_new.name}</p>
+                <img src="${question_new.image}" class="img-fluid">
+                <input type="hidden" id="attributes" name="attributes" value="${question_new.attributes}">
+                <button class="close" type="button" onClick="delQuestion(this)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        `;
 
-        $listItem.setAttribute('id', question_new.id);
-        $listItem.setAttribute('onClick', 'openQuestion(this)');
-
-        var $name_char = document.createElement('p');
-        $name_char.textContent = question_new.name;
-        $name_char.classList.add('text-muted');
-
-        $listItem.appendChild($name_char);
-
-        var $image_char = document.createElement('img');
-        $image_char.src = question_new.image;
-        $image_char.classList.add('img-fluid');
-
-        $listItem.appendChild($image_char);
-
-        var $button_exclude = document.createElement('button');
-        $button_exclude.classList.add('close');
-        $button_exclude.type = 'button';
-        var $ico_exlude = document.createElement('span');
-        $ico_exlude.setAttribute('aria-hidden', 'true');
-        $ico_exlude.innerHTML = '&times;';
-        $button_exclude.createElement($ico_exlude);
-        $button_exclude.setAttribute('onClick', 'delQuestion(this)');
-
-        $listItem.appendChild($image_char);
-
-        var $input_hidden = document.createElement('input');
-        $input_hidden.type = 'hidden';
-        $input_hidden.id = 'attributes';
-        $input_hidden.name = 'attributes';
-        $input_hidden.value = question_new.attributes;
-
-        $listItem.appendChild($input_hidden);
-
-        $listaCadastrados.appendChild($listItem);
+        $('#lista_cadastrados').append($listItem);
     },
     open: function () {
         $('#question_div_container').slideDown('slow');

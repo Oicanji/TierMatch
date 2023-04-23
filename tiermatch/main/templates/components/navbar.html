@@ -10,15 +10,15 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'home' %}">Em destaque {% if request.resolver_match.url_name == 'home' %}<span class="sr-only">(current)</span>{% endif %}</a>
                 </li>
-                <li class="nav-item">
+                {% comment %} <li class="nav-item">
                     <a class="nav-link" href="{% url 'my_quizzes' %}">Quizzes {% if request.resolver_match.url_name == 'my_quizzes' %}<span class="sr-only">(current)</span>{% endif %}</a>
-                </li>
+                </li> {% endcomment %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'quiz' %}">Cadastrar quiz {% if request.resolver_match.url_name == 'quiz' %}<span class="sr-only">(current)</span>{% endif %}</a>
                 </li>
-                <li class="nav-item">
+                {% comment %} <li class="nav-item">
                     <a class="nav-link" href="#">Resultados</a>
-                </li>
+                </li> {% endcomment %}
             </ul>
             <span class="navbar-text">
                 <a href="/logout"><i class="fa-solid fa-power-off"></i> Sair</a>

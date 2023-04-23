@@ -18,7 +18,6 @@ def index(request):
             "id": quiz.id,
             "name": quiz.name,
             "description": quiz.description,
-            "create_by_id": quiz.create_by_id,
             "create_at": quiz.create_at.strftime("%d/%m/%Y %H:%M:%S"),
             "super_allow_allias": quiz.super_allow_allias,
             "allow_allias": quiz.allow_allias,
@@ -27,9 +26,22 @@ def index(request):
             "allow_color": quiz.allow_color,
             "deny_color": quiz.deny_color,
         }
+        if quiz.create_by == request.user:
+            quiz_dict['is_owner'] = True
+        else:
+            quiz_dict['is_owner'] = False
+        categories = Categories.objects.filter(quiz_id=quiz.id)
+        list_categories = []
+        for category in categories:
+            cat = Category.objects.filter(id=category.categories_id.id).first()
+            list_categories.append({'id': cat.id, 'name': cat.name, 'color': cat.color})
+        quiz_dict['categories'] = list_categories
         res.append(quiz_dict)
+
+    res =json.dumps(res)
     print(res)
-    return render(request, 'pages/home.html', {})
+    #get categories with quiz_id = quiz.id
+    return render(request, 'pages/home.html', {"res": res})
 
 
 def undefined(request):

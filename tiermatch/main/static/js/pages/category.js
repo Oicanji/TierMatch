@@ -6,6 +6,7 @@ const category = {
         }
     },
     send: function (data = false) {
+        $('#cadastrar_categoria_button').attr('disabled', true);
         if (!data) {
             data = {
                 name: $('#categories_name').val(),
@@ -25,9 +26,13 @@ const category = {
             //refresh
             category.build();
             $('#modalCadastrarCategoria').modal('hide');
+            setTimeout(() => {
+                $('#cadastrar_categoria_button').attr('disabled', false);
+            }, 1000);
         })
         .catch((error) => {
             console.error(error.json());
+            $('#cadastrar_categoria_button').attr('disabled', false);
         });
     },
     get: function (id = [], callback = false) {
