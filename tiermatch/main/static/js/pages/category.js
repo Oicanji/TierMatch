@@ -8,6 +8,8 @@ const category = {
     send: function (data = false) {
         $('#cadastrar_categoria_button').attr('disabled', true);
         if (!data) {
+
+            console.log("aQUII");
             data = {
                 name: $('#categories_name').val(),
                 color: $('#categories_color').val(),

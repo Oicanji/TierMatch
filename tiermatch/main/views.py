@@ -367,11 +367,10 @@ def create_category(request):
     args = {'method': 'criar', 'suffix': 'categoria', 'route': 'category/create'}
     if request.method != 'POST':
         return response(403, args)
-
     data = json.loads(request.body)
+    print(data)
     name = data.get('name')
     color = data.get('color')
-    print(name)
     if name and color:
         category = Category(name=name, color=color)
         category.save()
@@ -429,7 +428,8 @@ def get_question_all(request):
     args = {'method': 'buscar todos', 'suffix': 'pergunta', 'route': 'question/get/all'}
     if request.method != 'GET':
         return response(403, args)
-    question = Question.objects.all()
+    data = json.loads(request.body)
+    question = Question.objects.filter(quiz_id=data.get('quiz_id'))
     res = []
     for q in question:
         question_dict = {
@@ -447,13 +447,12 @@ def get_question_all(request):
 @login_required
 def get_question_id(request):
     args = {'method': 'buscar por id', 'suffix': 'pergunta', 'route': 'question/get/id'}
-    data = {}
+    data = json.loads(request.body)
     if request.method != 'GET':
         return response(403, args)
     res = []
-    if data.get('quiz_id'):
-        quiz_id = data.get('quiz_id')
-        question = Question.objects.filter(quiz_id=quiz_id).first()
+    if data.get('id'):
+        question = Question.objects.filter(id=data.get('id')).first()
         res.append({"id": question.id, "name": question.name, 
                     "image": question.image, "attribute": question.attribute, "quiz_id": question.quiz_id})
         args['response'] = res
