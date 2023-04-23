@@ -446,23 +446,41 @@ def create_question(request):
 
 
 @login_required
-def get_question(request):
-    args = {'method': 'buscar', 'suffix': 'pergunta', 'route': 'question/get'}
+def get_question_all(request):
+    args = {'method': 'buscar todos', 'suffix': 'pergunta', 'route': 'question/get/all'}
+    if request.method != 'GET':
+        return response(403, args)
+    question = Question.objects.all()
+    res = []
+    for q in question:
+        question_dict = {
+            "id": q.id, 
+            "name": q.name, 
+            "image": q.image, 
+            "attribute": q.attribute, 
+            "quiz_id": q.quiz_id
+            }
+        res.append(question_dict)
+    args['response'] = res
+    res['response'] = format_values_question(args)
+    return response(200, args)
+
+@login_required
+def get_question_id(request):
+    args = {'method': 'buscar por id', 'suffix': 'pergunta', 'route': 'question/get/id'}
     data = {}
     if request.method != 'GET':
         return response(403, args)
-    data = json.loads(request.body)
     res = []
     if data.get('quiz_id'):
         quiz_id = data.get('quiz_id')
-        questions = Question.objects.filter(quiz_id=quiz_id)
-        for question in questions:
-            res.append({"name": question.name, "description": question.description, "image": question.image, "attribute": question.attribute, "quiz_id": question.quiz_id})
+        question = Question.objects.filter(quiz_id=quiz_id).first()
+        res.append({"id": question.id, "name": question.name, 
+                    "image": question.image, "attribute": question.attribute, "quiz_id": question.quiz_id})
         args['response'] = res
         res['response'] = format_values(args)
         return response(200, args)
-    else:
-        return response(400, args)
+
 
 
 @login_required
