@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import *
 
-from .reponse import response, format_values
+from .reponse import response, format_values, format_values_question
 
 @login_required
 def index(request):
@@ -379,7 +379,6 @@ def remove_category(request):
         return response(400, args)
 
 
-
 @login_required
 def create_question(request):
     args = {'method': 'criar', 'suffix': 'pergunta', 'route': 'question/create'}
@@ -396,11 +395,12 @@ def create_question(request):
     if name and image and attribute and quiz_id:
         question = Question(name=name, image=image, attribute=attribute, quiz_id=quiz)
         question.save()
-        question = question.objects.filter(id=question.id).first()
+        question = Question.objects.filter(id=question.id).first()
         res = []
-        res.append({"name": question.name, "description": question.description, "image": question.image, "attribute": question.attribute, "quiz_id": question.quiz_id})
+        res.append({"id": question.id, "name": question.name, "image": question.image, "attribute": question.attribute, "quiz_id": question.quiz_id.id})
+        print(res)
         args['response'] = res
-        res['response'] = format_values(args)
+        args['response'] = format_values_question(args)
         return response(200, args)
     else:
         return response(400, args)

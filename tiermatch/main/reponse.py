@@ -38,12 +38,10 @@ def response(code_int, params = {}):
     if 'route' in params:
         res['route'] = params['route']
 
-    print(res)
     return HttpResponse(dumps(res), content_type='text/plain')
 
 def format_values(args):
     params = {}
-    print(params)
     for i in args['response']:
         params["id"] = i['id']
         params["name"] = i['name']
@@ -61,10 +59,10 @@ def format_values(args):
         return params
 
 def format_values_question(args):
-    params = []
+    params = {}
     for i in args['response']:
+        params['id'] = i['id']
         params["name"] = i['name']
-        params["description"] = i['description']
         params["image"] = i['image']
         params["attribute"] = i['attribute']
         params["quiz_id"] = i['quiz_id']
