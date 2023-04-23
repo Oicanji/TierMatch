@@ -51,10 +51,8 @@ def create_quiz(request, quiz_id=None):
                 "res": json,
             }
             return render(request, 'pages/create_quiz.html', context)
-        else:
-            return render(request, 'pages/undefined.html', context=False)
-    else:
-        return render(request, 'pages/create_quiz.html', context=False)
+            
+    return render(request, 'pages/create_quiz.html', {"res": {}})
 
 
 
