@@ -119,7 +119,11 @@
     </div>
 </div>
 
+{% if res  %}
 <input type="hidden" id="edit_url" value='{{ res|default:"null"|safe }}'></input>
+{% else %}
+<input type="hidden" id="edit_url" value='null'></input>
+{% endif %}
 
 {% load static %}
 
@@ -129,4 +133,6 @@
 <script src="{% static 'js/pages/question.js' %}"></script>
 <script src="{% static 'js/pages/quiz_page.js' %}"></script>
 <script src="{% static 'js/pages/attributes.js' %}"></script>
+
+{% include 'components/ad.html' %}
 {% endblock %}
