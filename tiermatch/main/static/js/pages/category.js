@@ -83,6 +83,14 @@ const category = {
             $('#categoria_div_'+id+' .categoria_div button.close.add span').html('-');
         }
     },
+    desative_all: function () {
+        for (let i = 0; i < categories.length; i++) {
+            const item = categories[i];
+            $('#categoria_div_'+item.id+' .categoria_div').removeClass('active');
+            $('#categoria_div_'+item.id+' .categoria_div button.close.delete').show();
+            $('#categoria_div_'+item.id+' .categoria_div button.close.add span').html('+');
+        }
+    },
     build: async function () {
         const response = await category.get([], category.draw);
     },

@@ -21,8 +21,39 @@ def my_quizzes(request):
     return render(request, 'pages/my_quizzes.html', {})
 
 @login_required
-def create_quiz(request):
-    return render(request, 'pages/create_quiz.html', {})
+def create_quiz(request, quiz_id=None):
+    if quiz_id is not None:
+        quiz = Quiz.objects.filter(id=quiz_id).first()
+        if quiz:
+            res = {
+                "id": quiz.id,
+                "name": quiz.name,
+                "description": quiz.description,
+                "create_at": quiz.create_at.strftime("%d/%m/%Y %H:%M:%S"),
+                "super_allow_allias": quiz.super_allow_allias,
+                "allow_allias": quiz.allow_allias,
+                "deny_allias": quiz.deny_allias,
+                "super_allow_color": quiz.super_allow_color,
+                "allow_color": quiz.allow_color,
+                "deny_color": quiz.deny_color,
+            }
+            list_categories_saves = []
+            category_exists = Categories.objects.filter(quiz_id=quiz.id)
+            for category in category_exists:
+                list_categories_saves.append(category.categories_id.id)
+
+            res['categories'] = list_categories_saves
+            
+            context = {
+                "res": res,
+            }
+
+            print(res)
+            return render(request, 'pages/create_quiz.html', context)
+        else:
+            return render(request, 'pages/undefined.html', context=False)
+    else:
+        return render(request, 'pages/create_quiz.html', context=False)
 
 
 

@@ -1,5 +1,6 @@
+quiz_atual = ($('#edit_url').val() != '') ? JSON.parse($('#edit_url').val()) : null;
+console.log(quiz_atual);
 listQuestions = [];
-quiz_atual = null; // mandar aqui o objeto do quiz atual se for editar
 
 $(document).ready(function () {
     if (quiz_atual != null) {
@@ -165,6 +166,7 @@ quiz = {
         attributes.quiz_init();
         listQuestions = data.questions ? data.questions : [];
         quiz_atual = data;
+        categories_to_enable = data.categories;
         quiz.init('edit');
     }
 }

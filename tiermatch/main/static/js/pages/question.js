@@ -15,15 +15,17 @@ const question = {
         var attributes = attributes.list_use;
         var quiz_id = quiz_atual.id;
 
+        data = {
+            name,
+            image,
+            attributes,
+            quiz_id
+        }
+        data = JSON.stringify(data);
         $.ajax({
-            url: '/set/question',
+            url: '/question/set/',
             method: 'POST',
-            data: {
-                name,
-                image,
-                attributes,
-                quiz_id
-            },
+            data: data,
             dataType: 'json',
             success: function (response) {
                 question.add_question({name, image, id: response.id});
@@ -70,7 +72,10 @@ const question = {
         $('#question_image').val(question_image);
         $('#question_id').val(question_id);
 
-
+        category.desative_all();
+        for (const attribute of attributes.list_use) {
+            category.active(attribute.category_id);
+        }
         
         $('#modalCadastrarQuestion').modal('show');
     },
