@@ -240,12 +240,26 @@ def edit_quiz(request):
     if not data:
         return response(400, args)
     quiz = Quiz.objects.filter(id=data.get('id')).first()
+    current_user = request.user.id
     res = []
     if quiz:
         for key in data:
             if key not in ['id', 'name', 'description', 'super_allow_allias', 'allow_allias', 'deny_allias', 'super_allow_color', 'allow_color', 'deny_color', 'categories']:
                 return response(400, args)
+            
+        res = []
+        quiz.name = data.get('name')
+        quiz.description = data.get('description')
+        quiz.super_allow_allias = data.get('super_allow_allias')
+        quiz.allow_allias = data.get('allow_allias')
+        quiz.deny_allias = data.get('deny_allias')
+        quiz.super_allow_color = data.get('super_allow_color')
+        quiz.allow_color = data.get('allow_color')
+        quiz.deny_color = data.get('deny_color')
+
         quiz.save()
+        quiz = Quiz.objects.filter(id=quiz.id).first()
+
         list_categories = data.get('categories')
         list_categories_saves = []
         if list_categories is not None and len(list_categories) > 0:
@@ -263,7 +277,7 @@ def edit_quiz(request):
             "deny_allias": quiz.deny_allias, "super_allow_color": quiz.super_allow_color, 
             "allow_color": quiz.allow_color, "deny_color": quiz.deny_color,
             "categories": list_categories_saves
-        }) 
+        })
                 
         args['response'] = res
         args['response'] = format_values(args)
