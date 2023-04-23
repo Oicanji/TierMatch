@@ -6,8 +6,7 @@ const question = {
     },
     edit: function () {
         question.open();
-
-        $get_question = $('#get_question');
+        question.build();
     },
     add: function () {
         var name = $('#question_name').val();
@@ -114,50 +113,48 @@ const question = {
         $('#question_div_container').slideDown('slow');
         $('#question_not_allow').slideUp('slow');
     },
+    build: function () {
+        data = {
+            id: quiz_atual.id,
+        }
+        data = JSON.stringify(data);
+        $.ajax({
+            url: '/question/get/all',
+            method: 'GET',
+            data: data,
+            dataType: 'json',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function (response) {
+                console.log(response);
+                if (response.code == 200) {
+                    data = JSON.parse(response.data);
+                    for (const question of data) {
+                        question.remove_all();
+                        question.add_question(question);
+                    }
+                }
+            }, error: function (error) {
+                console.log(error);
+            }
+        });
+    },
+    remove_all: function () {
+        $('#lista_cadastrados').empty();
+    }
 }
 
 function openQuestion(valores) {
     question.open(valores);
 }
-
-function delQuestion(button_click) {
-    div_question = button_click.parentNode;
-    //get input id from question_id
-    id = div_question.querySelector('input[name="question_id"]').value;
-    $.ajax({
-        url: 'remove/question',
-        method: 'POST',
-        data: {
-            id
-        },
-        dataType: 'json',
-        success: function (response) {
-            responde = response.json(); // caso venha dentro de outra var colocar .response
-            if (responde.status == 'success') {
-                div_question.remove();
-            }
-        },
-        error: function (error) {
-            const return_alert = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            });
-            return_alert.fire({
-                icon: 'danger',
-                title: error.responseJSON.message,
-            });
-        }
-    });
-}
 $('#question_cadastrar').on('click', function () {
+    $(this).attr('disabled', true);
     question.add();
+    setTimeout(() => {
+        $(this).attr('disabled', false);
+    }, 1000);
 });
 
 $('#question_image').on('change', function () {

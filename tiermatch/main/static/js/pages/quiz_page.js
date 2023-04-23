@@ -18,6 +18,8 @@ quiz = {
         }
     },
     edit: function () {
+        question.init('edit');
+        
         $('#title-quiz').text('Editar Quiz ' + quiz_atual.name + ".");
         $('#name').val(quiz_atual.name);
         $('#description').val(quiz_atual.description);
