@@ -36,6 +36,17 @@ def index(request):
             cat = Category.objects.filter(id=category.categories_id.id).first()
             list_categories.append({'id': cat.id, 'name': cat.name, 'color': cat.color})
         quiz_dict['categories'] = list_categories
+
+        image_question = ''
+        questions = Question.objects.filter(quiz_id=quiz.id)
+        for question in questions:
+            image_question = question.image
+            break
+        if image_question != '':
+            quiz_dict['image'] = image_question
+        else:
+            quiz_dict['image'] = ('static/images/not_found.png')
+
         res.append(quiz_dict)
 
     res =json.dumps(res)

@@ -21,11 +21,11 @@ quiz = {
         $('#title-quiz').text('Editar Quiz ' + quiz_atual.name + ".");
         $('#name').val(quiz_atual.name);
         $('#description').val(quiz_atual.description);
-        $('#super_allow_alias').val(quiz_atual.super_allow_alias);
+        $('#super_allow_alias').val(quiz_atual.super_allow_allias);
         $('#super_allow_color').val(quiz_atual.super_allow_color);
-        $('#allow_alias').val(quiz_atual.allow_alias);
+        $('#allow_alias').val(quiz_atual.allow_allias);
         $('#allow_color').val(quiz_atual.allow_color);
-        $('#deny_alias').val(quiz_atual.deny_alias);
+        $('#deny_alias').val(quiz_atual.deny_allias);
         $('#deny_color').val(quiz_atual.deny_color);
 
         $('#question_not_allow').remove()
@@ -53,12 +53,12 @@ quiz = {
             data = {
                 name: $('#name').val(),
                 description: $('#description').val(),
-                super_allow_allias: $('#super_allow_alias').val() ? $('#super_allow_alias').val() : 'Super Gostei',
-                super_allow_color: $('#super_allow_color').val() ? $('#super_allow_color').val() : '#f9c74f',
-                allow_allias: $('#allow_alias').val() ? $('#allow_alias').val() : 'Gostei',
-                allow_color: $('#allow_color').val() ? $('#allow_color').val() : '#ff595e',
-                deny_allias: $('#deny_alias').val() ? $('#deny_alias').val() : 'Não Gostei',
-                deny_color: $('#deny_color').val() ? $('#deny_color').val() : '#00b4d8',
+                super_allow_allias: $('#super_allow_alias').val() && $('#super_allow_alias').val() != '' ? $('#super_allow_alias').val() : 'Super Gostei',
+                super_allow_color: $('#super_allow_color').val() && $('#super_allow_color').val() != '' ? $('#super_allow_color').val() : '#f9c74f',
+                allow_allias: $('#allow_alias').val() && $('#allow_alias').val() != '' ? $('#allow_alias').val() : 'Gostei',
+                allow_color: $('#allow_color').val() && $('#allow_color').val() != '' ? $('#allow_color').val() : '#ff595e',
+                deny_allias: $('#deny_alias').val() && $('#deny_alias').val() != '' ? $('#deny_alias').val() : 'Não Gostei',
+                deny_color: $('#deny_color').val() && $('#deny_color').val() != '' ? $('#deny_color').val() : '#00b4d8',
                 categories: categorias_list,
             }
             //casoum dos campos esteja vazio
