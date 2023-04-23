@@ -113,7 +113,7 @@ const question = {
                         </button>
                     </div>
                     <div class="card-body p-0">
-                        <img src="${question_new.image}" class="img-fluid">
+                        <img src="${question_new.image}" class="img-fluid" style="height: 200px; min-height: 200px; max-height: 200px;">
                         <input type="hidden" id="attributes" name="attributes" value="${question_new.attributes}">
                     </div>
             </div>
@@ -145,9 +145,10 @@ const question = {
             success: function (response) {
                 if (response.code == 200) {
                     data = JSON.parse(response.data);
-                    for (const question of data) {
-                        question.remove_all();
-                        question.add_question(question);
+                    console.log(data);
+                    $('#lista_cadastrados').empty();
+                    for (const quest of data) {
+                        question.add_question(quest);
                     }
                 }
             }, error: function (error) {

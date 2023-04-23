@@ -403,7 +403,9 @@ def create_question(request):
     data = json.loads(request.body)
     name = data.get('name')
     image = data.get('image')
-    attribute = data.get('attribute')
+    attribute = ''
+    if data.get('attribute'):
+        attribute = data.get('attribute')
     quiz_id = data.get('quiz_id')
     quiz = Quiz.objects.filter(id=quiz_id).first()
     if quiz.create_by_id != request.user.id:
@@ -439,8 +441,7 @@ def get_question_all(request):
             "quiz_id": q.quiz_id.id
             }
         res.append(question_dict)
-    args['response'] = res
-    res['response'] = format_values_question(args)
+    args['response'] = json.dumps(res)
     return response(200, args)
 
 @login_required

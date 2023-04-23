@@ -1,6 +1,11 @@
 quiz.result = {
     init: function (stats) {
         html = `
+            <div class="container p-0">
+                <a href="/" class="btn btn-primary m-0 p-0 mt-2">
+                    <button class="btn btn-primary">Voltar</button>
+                </a>
+            </div>
             <div class="container p-5 mt-3 w-100 shadow rounded">
                 <h3>Você terminou o quiz "${quiz.data.name}"!</h3>
                 <p>Veja abaixo os resultados:</p>
