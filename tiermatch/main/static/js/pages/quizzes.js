@@ -1,26 +1,81 @@
 quizzes = {
+    delete_quiz: function(id){
+        data = {
+            id: id
+        }
+        data = JSON.stringify(data);
+        $.ajax({
+            url: '/quiz/delete/',
+            method: 'POST',
+            data: data,
+            dataType: 'json',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function (response) {
+                if (response.code == 200) {
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        icon: 'success',
+                        title: response.message,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+                    $(`#quiz_${id}`).remove();
+                }
+            }, error: function (error) {
+                swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    icon: 'error',
+                    title: 'Erro ao deletar quiz',
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+            }
+        });
+    },
     add_quiz: function (quiz) {
         botao_editar = '';
+        botao_deletar = '';
+        adicional = '';
         if(quiz.is_owner){
             botao_editar = `
             <a href="./quiz/${quiz.id}">
-                <button type="button" class="btn btn-primary mr-2">Editar <i class="fas fa-edit"></i></button>
+                <button type="button" class="btn btn-primary"><i class="fas fa-edit"></i></button>
             </a>`;
+            botao_deletar = `
+            <button type="button" class="btn btn-danger" onclick="quizzes.delete_quiz(${quiz.id})"><i class="fas fa-trash"></i></button>`;
+            adicional = `
+            <br />
+            <hr>`;
         }
         html = `
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 p-1">
+        <div class="col-12 col-sm-6 col-md-3 col-xl-2 p-1" id="quiz_${quiz.id}">
             <div class="card">
                 <div class="card-header text-center">
                     ${quiz.name}
                 </div>
                 <div class="card-body text-center">
-                    <img src="${quiz.image}" class="rounded" height="200px" width="100%">
-                    <div class="btn-group mt-2" role="group" aria-label="opcoes">
-                        ${botao_editar}
-                        <a href="./play/${quiz.id}">
-                            <button type="button" class="btn btn-danger">Jogar <i class="fas fa-play"></i></button>
-                        </a>
-                    </div>
+                    <img src="${quiz.image}" class="rounded mb-3" height="200px" width="100%">
+                    ${botao_editar}
+                    ${botao_deletar}
+                    ${adicional}
+                    <a href="./play/${quiz.id}">
+                        <button type="button" class="btn btn-success">Jogar <i class="fas fa-play"></i></button>
+                    </a>
                 </div>
             </div>
         </div>`;

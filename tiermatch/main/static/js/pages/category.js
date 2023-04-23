@@ -87,11 +87,11 @@ const category = {
         if($('#categoria_div_'+id+' .categoria_div').hasClass('active')){
             $('#categoria_div_'+id+' .categoria_div').removeClass('active');
             $('#categoria_div_'+id+' .categoria_div button.close.delete').show();
-            $('#categoria_div_'+id+' .categoria_div button.close.add span').html('+');
+            $('#categoria_div_'+id+' .categoria_div button.close.add span').html('<i class="fa-regular fa-square-plus"></i>');
         }else{
             $('#categoria_div_'+id+' .categoria_div').addClass('active');
             $('#categoria_div_'+id+' .categoria_div button.close.delete').hide();
-            $('#categoria_div_'+id+' .categoria_div button.close.add span').html('-');
+            $('#categoria_div_'+id+' .categoria_div button.close.add span').html('<i class="fa-regular fa-square-minus"></i>');
         }
     },
     desative_all: function () {
@@ -99,7 +99,7 @@ const category = {
             const item = categories[i];
             $('#categoria_div_'+item.id+' .categoria_div').removeClass('active');
             $('#categoria_div_'+item.id+' .categoria_div button.close.delete').show();
-            $('#categoria_div_'+item.id+' .categoria_div button.close.add span').html('+');
+            $('#categoria_div_'+item.id+' .categoria_div button.close.add span').html('<i class="fa-regular fa-square-plus"></i>');
         }
     },
     build: async function () {
@@ -120,10 +120,10 @@ const category = {
                     <span class="badge badge-primary categoria_div" style="background-color: ${item.color};"  value="${item.id}">
                         ${item.name}
                         <button type="button" class="close add" onclick="category.active(${item.id})">
-                            <span aria-hidden="true">+</span>
+                            <span aria-hidden="true"><i class="fa-regular fa-square-plus"></i></span>
                         </button>
                         <button type="button" class="close delete" onclick="category.delete(${item.id})">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true"><i class="fa-solid fa-trash"></i></span>
                         </button>
                     </span>
                 </div>`);
