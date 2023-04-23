@@ -11,7 +11,26 @@ from .reponse import response, format_values, format_values_question
 
 @login_required
 def index(request):
+    quizzes = Quiz.objects.all()
+    res = []
+    for quiz in quizzes:
+        quiz_dict = {
+            "id": quiz.id,
+            "name": quiz.name,
+            "description": quiz.description,
+            "create_by_id": quiz.create_by_id,
+            "create_at": quiz.create_at.strftime("%d/%m/%Y %H:%M:%S"),
+            "super_allow_allias": quiz.super_allow_allias,
+            "allow_allias": quiz.allow_allias,
+            "deny_allias": quiz.deny_allias,
+            "super_allow_color": quiz.super_allow_color,
+            "allow_color": quiz.allow_color,
+            "deny_color": quiz.deny_color,
+        }
+        res.append(quiz_dict)
+    print(res)
     return render(request, 'pages/home.html', {})
+
 
 def undefined(request):
     return render(request, 'pages/undefined.html', {})
@@ -37,8 +56,6 @@ def create_quiz(request, quiz_id=None):
                 "allow_color": quiz.allow_color,
                 "deny_color": quiz.deny_color,
             }
-
-
             list_categories_saves = []
             category_exists = Categories.objects.filter(quiz_id=quiz.id)
             for category in category_exists:
@@ -398,7 +415,6 @@ def create_question(request):
         question = Question.objects.filter(id=question.id).first()
         res = []
         res.append({"id": question.id, "name": question.name, "image": question.image, "attribute": question.attribute, "quiz_id": question.quiz_id.id})
-        print(res)
         args['response'] = res
         args['response'] = format_values_question(args)
         return response(200, args)
