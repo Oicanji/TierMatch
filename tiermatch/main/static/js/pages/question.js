@@ -32,7 +32,8 @@ const question = {
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
             success: function (response) {
-                if (response.code != 200) {
+                console.log(response);
+                if (response.code == 200) {
                     question.add_question({name, image, id: response.id});
                     $('#modalCadastrarQuestion').modal('hide');
                 } else {
