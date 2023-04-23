@@ -59,3 +59,13 @@ def format_values(args):
         params["deny_color"] = i['deny_color']
         params["categories"] = i["categories"]  
         return params
+
+def format_values_question(args):
+    params = []
+    for i in args['response']:
+        params["name"] = i['name']
+        params["description"] = i['description']
+        params["image"] = i['image']
+        params["attribute"] = i['attribute']
+        params["quiz_id"] = i['quiz_id']
+    return params

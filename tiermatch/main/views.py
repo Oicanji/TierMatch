@@ -261,8 +261,7 @@ def edit_quiz(request):
         for key in data:
             if key not in ['id', 'name', 'description', 'super_allow_allias', 'allow_allias', 'deny_allias', 'super_allow_color', 'allow_color', 'deny_color', 'categories']:
                 return response(400, args)
-            
-        res = []
+
         quiz.name = data.get('name')
         quiz.description = data.get('description')
         quiz.super_allow_allias = data.get('super_allow_allias')
@@ -271,9 +270,7 @@ def edit_quiz(request):
         quiz.super_allow_color = data.get('super_allow_color')
         quiz.allow_color = data.get('allow_color')
         quiz.deny_color = data.get('deny_color')
-
         quiz.save()
-        quiz = Quiz.objects.filter(id=quiz.id).first()
 
         list_categories = data.get('categories')
         list_categories_saves = []
@@ -299,7 +296,6 @@ def edit_quiz(request):
         return response(200, args)
     else:
         return response(404, args)
-
 
 """
 ROTA / REMOVE / QUIZ
@@ -400,6 +396,11 @@ def create_question(request):
     if name and image and attribute and quiz_id:
         question = Question(name=name, image=image, attribute=attribute, quiz_id=quiz)
         question.save()
+        question = question.objects.filter(id=question.id).first()
+        res = []
+        res.append({"name": question.name, "description": question.description, "image": question.image, "attribute": question.attribute, "quiz_id": question.quiz_id})
+        args['response'] = res
+        res['response'] = format_values(args)
         return response(200, args)
     else:
         return response(400, args)
@@ -418,6 +419,9 @@ def get_question(request):
         questions = Question.objects.filter(quiz_id=quiz_id)
         for question in questions:
             res.append({"name": question.name, "description": question.description, "image": question.image, "attribute": question.attribute, "quiz_id": question.quiz_id})
+        args['response'] = res
+        res['response'] = format_values(args)
+        return response(200, args)
     else:
         return response(400, args)
 
@@ -443,7 +447,7 @@ def edit_question(request):
         question = Question.objects.filter(id=question.id).first()
         res.append({"name": question.name, "description": question.description, "image": question.image, "attribute": question.attribute, "quiz_id": question.quiz_id})
         args['response'] = res
-        args['response'] = format_values(args)
+        res['response'] = format_values(args)
         return response(200, args)
     else:
         return response(404, args)
