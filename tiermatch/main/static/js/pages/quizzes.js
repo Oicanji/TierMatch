@@ -5,7 +5,7 @@ quizzes = {
         }
         data = JSON.stringify(data);
         $.ajax({
-            url: '/quiz/delete/',
+            url: '/quiz/remove/',
             method: 'POST',
             data: data,
             dataType: 'json',
