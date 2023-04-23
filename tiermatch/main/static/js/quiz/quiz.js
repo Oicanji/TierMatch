@@ -24,13 +24,13 @@ var quiz = {
         //instancias do quiz
         quiz.data = json.quiz;
 
-        quiz.allow = json.quiz.allow_alias;
-        quiz.deny = json.quiz.deny_alias;
-        quiz.super_allow = json.quiz.super_allow_alias;
+        quiz.allow = json.quiz.allow_alias != '' ? json.quiz.allow_alias : 'Aprovado';
+        quiz.deny = json.quiz.deny_alias ? json.quiz.deny_alias : 'Recusado';
+        quiz.super_allow = json.quiz.super_allow_alias ? json.quiz.super_allow_alias : 'Super Aprovado';
 
-        quiz.allow_color = json.quiz.allow_color;
-        quiz.deny_color = json.quiz.deny_color;
-        quiz.super_allow_color = json.quiz.super_allow_color;
+        quiz.allow_color = json.quiz.allow_color ? json.quiz.allow_color : '#ff595e';
+        quiz.deny_color = json.quiz.deny_color ? json.quiz.deny_color : '#f9c74f';
+        quiz.super_allow_color = json.quiz.super_allow_color ? json.quiz.super_allow_color : '#00b4d8';
 
         quiz.ui.colorLoader();
 
