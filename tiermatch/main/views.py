@@ -99,70 +99,45 @@ def create_quiz(request, quiz_id=None):
 @login_required
 def play(request):
     return render(request, 'pages/play.html', {})
-#     if request.method != 'GET':
-#         return render(request, "pages/undefined.html")
-#     quiz_id = request.GET.get('id')
-#     quiz = Quiz.objects.filter(id=quiz_id).first()
-#     if quiz:
-#         res = {
-#             "id": quiz.id,
-#             "name": quiz.name,
-#             "description": quiz.description,
-#             "create_by_id": quiz.create_by_id.id,
-#             "create_by_name": quiz.create_by_id.username,
-#             "create_at": quiz.create_at.strftime("%d/%m/%Y %H:%M:%S"),
-#             "super_allow_allias": quiz.super_allow_allias,
-#             "allow_allias": quiz.allow_allias,
-#             "deny_allias": quiz.deny_allias,
-#             "super_allow_color": quiz.super_allow_color,
-#             "allow_color": quiz.allow_color,
-#             "deny_color": quiz.deny_color,
-#             "categories": [],
-#             "questions": [],
-#         }
-#         categories = Category.objects.filter(quiz_id=quiz.id)
-#         for category in categories:
-#             res['categories'].append({
-#                 "id": category.id,
-#                 "name": category.name,
-#                 "description": category.description,
-#                 "quiz_id": category.quiz_id.id,
-#                 "quiz_name": category.quiz_id.name,
-#                 "quiz_description": category.quiz_id.description,
-#                 "questions": [],
-#             })
-#             questions = Question.objects.filter(category_id=category.id)
-#             for question in questions:
-#                 res['questions'].append({
-#                     "id": question.id,
-#                     "name": question.name,
-#                     "description": question.description,
-#                     "category_id": question.category_id.id,
-#                     "category_name": question.category_id.name,
-#                     "category_description": question.category_id.description,
-#                     "quiz_id": question.category_id.quiz_id.id,
-#                     "quiz_name": question.category_id.quiz_id.name,
-#                     "quiz_description": question.category_id.quiz_id.description,
-#                     "alternatives": [],
-#                 })
-#                 alternatives = Alternative.objects.filter(question_id=question.id)
-#                 for alternative in alternatives:
-#                     res['questions'][-1]['alternatives'].append({
-#                         "id": alternative.id,
-#                         "name": alternative.name,
-#                         "description": alternative.description,
-#                         "question_id": alternative.question_id.id,
-#                         "question_name": alternative.question_id.name,
-#                         "question_description": alternative.question_id.description,
-#                         "category_id": alternative.question_id.category_id.id,
-#                         "category_name": alternative.question_id.category_id.name,
-#                         "category_description": alternative.question_id.category_id.description,
-#                         "quiz_id": alternative.question_id.category_id.quiz_id.id,
-#                         "quiz_name": alternative.question_id.category_id.quiz_id.name,
-#                         "quiz_description": alternative.question_id.category_id.quiz_id.description,
-#                     })
-#         return render(request, 'pages/play.html', res)
-#     return render(request, 'pages/undefined.html', {})
+    # if request.method != 'GET':
+    #     return render(request, "pages/undefined.html")
+    # data = json.loads(request.body)
+    # quiz = Quiz.objects.filter(id=data.get('id')).first()
+    # if quiz:
+    #     res = {
+    #         "id": quiz.id,
+    #         "name": quiz.name,
+    #         "description": quiz.description,
+    #         "create_by_id": quiz.create_by,
+    #         "create_at": quiz.create_at.strftime("%d/%m/%Y %H:%M:%S"),
+    #         "super_allow_allias": quiz.super_allow_allias,
+    #         "allow_allias": quiz.allow_allias,
+    #         "deny_allias": quiz.deny_allias,
+    #         "super_allow_color": quiz.super_allow_color,
+    #         "allow_color": quiz.allow_color,
+    #         "deny_color": quiz.deny_color,
+    #         "categories": [],
+    #         "questions": [],
+    #     }
+    #     categories = Category.objects.filter(quiz_id=quiz.id)
+    #     for category in categories:
+    #         res['categories'].append({
+    #             "id": category.id,
+    #             "name": category.name,
+    #             "color": category.description,
+    #         })
+    #     questions = Question.objects.filter(quiz_id=quiz_id.id)
+    #     for question in questions:
+    #         res['questions'].append({
+    #             "id": question.id,
+    #             "name": question.name,
+    #             "image": question.image,
+    #             "attribute": question.category_id.name,
+    #             "quiz_id": question.category_id.quiz_id.id,
+    #         })
+    
+    #     return render(request, 'pages/play.html', res)
+    # return render(request, 'pages/undefined.html', {})
 
 
 @login_required

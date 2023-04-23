@@ -14,10 +14,11 @@ urlpatterns = [
 
     path('quiz/create/', views.set_quiz, name='create_quiz'),
     path('quiz/edit/', views.edit_quiz, name='edit_quiz'),
+    path('quiz/remove/', views.remove_quiz, name='remove_quiz'),
 
     path('question/create/', views.create_question, name='create_question'),
     path('question/get/all', views.get_question_all, name='get_question_all'),
-    path('question/get/id', views.get_question_id, name='get_question_id'),
+    path('question/get/<int:id>', views.get_question_id, name='get_question_id'),
     path('question/remove/', views.remove_question, name='remove_question'),
     path('question/edit/', views.edit_question, name='edit_question'),
 ]
