@@ -50,7 +50,6 @@ def index(request):
         res.append(quiz_dict)
 
     res =json.dumps(res)
-    print(res)
     #get categories with quiz_id = quiz.id
     return render(request, 'pages/home.html', {"res": res})
 
@@ -137,7 +136,6 @@ def play(request, id_url):
                 "stats": question.attribute.replace("'", '"'),
             })
         res = json.dumps(res)
-        print(res)
         context['quiz'] = res
         return render(request, 'pages/play.html', context)
     return render(request, 'pages/undefined.html', {})
@@ -177,7 +175,6 @@ def get_quiz(request):
                                     "deny_color": quiz.deny_color, "categories": list_categories_saves})
             args['response'] = res
             args['response'] = format_values(args)
-            print(args)
             return response(200, args)
         else:
             return response(404, args)
@@ -273,7 +270,8 @@ def edit_quiz(request):
     if not data:
         return response(400, args)
     quiz = Quiz.objects.filter(id=data.get('id')).first()
-    current_user = request.user.id
+    if request.user.id != quiz.create_by.id:
+        return response(403, args)
     res = []
     if quiz:
         for key in data:
@@ -426,18 +424,19 @@ def create_question(request):
 @login_required
 def get_question_all(request):
     args = {'method': 'buscar todos', 'suffix': 'pergunta', 'route': 'question/get/all'}
-    if request.method != 'GET':
+    if request.method != 'POST':
         return response(403, args)
     data = json.loads(request.body)
-    question = Question.objects.filter(quiz_id=data.get('quiz_id'))
+    id = data.get('id')
+    question = Question.objects.filter(quiz_id=id)
     res = []
     for q in question:
         question_dict = {
             "id": q.id, 
             "name": q.name, 
-            "image": q.image, 
             "attribute": q.attribute, 
-            "quiz_id": q.quiz_id
+            "image": q.image,
+            "quiz_id": q.quiz_id.id
             }
         res.append(question_dict)
     args['response'] = res
@@ -456,7 +455,6 @@ def get_question_id(request):
         res.append({"id": question.id, "name": question.name, 
                     "image": question.image, "attribute": question.attribute, "quiz_id": question.quiz_id})
         args['response'] = res
-        res['response'] = format_values(args)
         return response(200, args)
 
 

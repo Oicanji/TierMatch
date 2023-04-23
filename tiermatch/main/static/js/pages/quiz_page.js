@@ -168,6 +168,7 @@ quiz = {
     },
     pos_create: function (data) {
         attributes.quiz_init();
+        console.log(data);
         listQuestions = data.questions ? data.questions : [];
         quiz_atual = data;
         categories_to_enable = data.categories;

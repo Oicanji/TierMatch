@@ -7,6 +7,8 @@
 {% include 'components/navbar.html' %}
 {% csrf_token %}
 
+<input type="hidden" id="attributes_list" name="attributes_list" value="[]">
+
 <div class="container">
     <div class="p-5">
         <h3 align="center" id="title-quiz">Cadastrar um Novo Quiz</h3>
@@ -52,7 +54,8 @@
                 </div>
                 <div class="position-relative">
                     <button class="btn btn-sm btn-secondary position-absolute" style="top: -30px; right: 0"
-                        data-toggle="modal" data-target="#modalCadastrarQuestion">
+                        data-toggle="modal" data-target="#modalCadastrarQuestion"
+                        onclick="attributes.open()">
                         Adicionar Personagem
                     </button>
                 </div>

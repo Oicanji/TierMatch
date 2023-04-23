@@ -82,6 +82,16 @@ quizzes = {
         $('#todos_os_quizzes').append(html);
     },
     init: function(values) {
+        if (values.length == 0) {
+            $('#todos_os_quizzes').append(`
+            <div class="col-12">
+                <div class="alert alert-warning text-center" role="alert">
+                    Nenhum quiz encontrado
+                </div>
+            </div>
+            `);
+            return;
+        }
         for (const value of values) {
             quizzes.add_quiz(value);
         }

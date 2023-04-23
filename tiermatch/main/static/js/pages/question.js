@@ -33,8 +33,15 @@ const question = {
             success: function (response) {
                 if (response.code == 200) {
                     data = JSON.parse(response.data);
-                    console.log(data);
                     question.add_question({name: data.name, image: data.image, id: data.id});
+
+                    $('#question_name').val('');
+                    $('#question_image').val('');
+
+                    $('#question_image_preview').attr('src', '');
+                    $('#question_image_preview').css('display', 'none');
+
+
                     $('#modalCadastrarQuestion').modal('hide');
                 } else {
                     Swal.fire({
@@ -95,15 +102,20 @@ const question = {
         $('#modalCadastrarQuestion').modal('show');
     },
     add_question: function (question_new) {
-        console.log(question_new);
+
         const $listItem = `
-            <div class="col-md-4 col-sm-6 text-center position-relative question-div" id="${question_new.id}" onClick="openQuestion(this)">
-                <p class="text-muted">${question_new.name}</p>
-                <img src="${question_new.image}" class="img-fluid">
-                <input type="hidden" id="attributes" name="attributes" value="${question_new.attributes}">
-                <button class="close" type="button" onClick="delQuestion(this)">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="col-md-4 col-sm-6 text-center position-relative mt-4 mb-4 question-div" id="${question_new.id}" onClick="openQuestion(this)">
+                <div class="card rounded">
+                    <div class="card-header">
+                        <p class="text-muted p-0 m-0">${question_new.name}</p>
+                        <button class="close" type="button" onClick="question.del(${question_new.id})">
+                            <span aria-hidden="true"><i class="fa-regular fa-square-plus"></i></span>
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <img src="${question_new.image}" class="img-fluid">
+                        <input type="hidden" id="attributes" name="attributes" value="${question_new.attributes}">
+                    </div>
             </div>
         `;
 
@@ -113,6 +125,9 @@ const question = {
         $('#question_div_container').slideDown('slow');
         $('#question_not_allow').slideUp('slow');
     },
+    remove_all: function () {
+        $('#lista_cadastrados').empty();
+    },
     build: function () {
         data = {
             id: quiz_atual.id,
@@ -120,7 +135,7 @@ const question = {
         data = JSON.stringify(data);
         $.ajax({
             url: '/question/get/all',
-            method: 'GET',
+            method: 'POST',
             data: data,
             dataType: 'json',
             headers: {
@@ -128,7 +143,6 @@ const question = {
                 'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
             success: function (response) {
-                console.log(response);
                 if (response.code == 200) {
                     data = JSON.parse(response.data);
                     for (const question of data) {
@@ -141,14 +155,32 @@ const question = {
             }
         });
     },
-    remove_all: function () {
-        $('#lista_cadastrados').empty();
+    del: function (question_id) {
+        data = {
+            id: question_id,
+        }
+        data = JSON.stringify(data);
+        $.ajax({
+            url: '/question/remove/',
+            method: 'POST',
+            data: data,
+            dataType: 'json',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function (response) {
+                console.log(response);
+                if (response.code == 200) {
+                    question.build();
+                }
+            }, error: function (error) {
+                console.log(error);
+            }
+        });
     }
 }
 
-function openQuestion(valores) {
-    question.open(valores);
-}
 $('#question_cadastrar').on('click', function () {
     $(this).attr('disabled', true);
     question.add();

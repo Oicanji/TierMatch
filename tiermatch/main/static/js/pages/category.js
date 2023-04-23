@@ -5,16 +5,12 @@ const category = {
             category.in_edit_mode = true;
         }
     },
-    send: function (data = false) {
+    send: function () {
         $('#cadastrar_categoria_button').attr('disabled', true);
-        if (!data) {
-
-            console.log("aQUII");
-            data = {
-                name: $('#categories_name').val(),
-                color: $('#categories_color').val(),
-            };
-        }
+        data = {
+            name: $('#categories_name').val(),
+            color: $('#categories_color').val(),
+        };
         fetch('/category/create/', {
             method: 'POST',
             headers: {
